@@ -1,8 +1,9 @@
-const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
+import express from "express";
+import bodyParser from "body-parser";
+import cors from "cors";
+
 const PORT = process.env.PORT || 3001;
-const cors = require("cors")
+const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());

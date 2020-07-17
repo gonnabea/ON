@@ -9,8 +9,8 @@
 - [ ] MySQL
 - [x] Express
 - [x] React.js
-- [x] Styled-Components
 - [x] Node.js
+- [x] Styled-Components
 - [ ] Socket.io
 
 ## 기본 기능
