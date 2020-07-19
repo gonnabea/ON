@@ -19,11 +19,14 @@ const server = app.listen(PORT, ()=>{
     console.log(`express is running on ${PORT}`);
 })
 
-const io = SocketIO(server);
+const io = SocketIO.listen(server);
+
+let sockets = [];
 
 io.on('connection', (socket) => {
-    console.log("User Connected")
-    socket.on("chat message", msg => {
-        io.emit('chat message', "sdfasfd")
-    })
+    sockets.push(socket)
+    socket.on("init", (props) => console.log(`${props.name}: 안녕하세요!!!`));
+    socket.broadcast.emit("welcome", "유저가 접속하였습니다.")
 })
+
+console.log(sockets);

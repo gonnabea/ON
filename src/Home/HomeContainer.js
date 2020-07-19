@@ -3,18 +3,31 @@ import HomePresenter from "./HomePresenter";
 
 class Home extends Component {
   state = {
-    username: null
+    username: null,
+    loading: true
   }
-
-  componentDidMount() {
-       fetch('api')
-            .then(res=>res.json())
-            .then(data=>this.setState({username:data.username}));
+  
+  
+  async componentDidMount() {
+      setTimeout(
+          () => {
+              fetch('api')
+                   .then(res=>res.json())
+                   .then(data=>this.setState({username:data.username, loading:false}));
+          },1000
+      );
+     
+                   
+     
+      
   }
 
   render() {
-    const { username } = this.state
-      return <HomePresenter username={username} />
+    const { username, loading } = this.state;
+      return <HomePresenter 
+      username={username}
+      loading={loading}
+    />
   }
 }
 
