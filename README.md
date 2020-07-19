@@ -1,4 +1,4 @@
-# Our Now
+# Our Now (ON)
 
 ## 간략 소개
 
@@ -6,12 +6,14 @@
 
 ## 사용 기술 스택
 
-- [ ] MySQL
-- [x] Express
+- [ ] MySQL 💎
+- [x] Express.js
 - [x] React.js
 - [x] Node.js
 - [x] Styled-Components
 - [ ] Socket.io
+
+- 본 프로젝트의 **주 목적은 SQL, webSocket에 대힌 학습**이며, Express.js + React.js의 조합에 익숙해지기 위해 구상한 사이드 프로젝트입니다. 
 
 ## 기본 기능
 
