@@ -4,6 +4,7 @@ import cors from "cors";
 import helmet from "helmet";
 import SocketIO from "socket.io";
 import morgan from "morgan";
+import { socketController } from "./socket-server/socketContoller";
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -21,12 +22,7 @@ const server = app.listen(PORT, ()=>{
 
 const io = SocketIO.listen(server);
 
-let sockets = [];
 
-io.on('connection', (socket) => {
-    sockets.push(socket)
-    socket.on("init", (props) => console.log(`${props.name}: 안녕하세요!!!`));
-    socket.broadcast.emit("welcome", "유저가 접속하였습니다.")
-})
+io.on('connection', (socket) => socketController(socket))
 
-console.log(sockets);
+

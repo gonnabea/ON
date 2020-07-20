@@ -16,10 +16,6 @@ class Home extends Component {
                    .then(data=>this.setState({username:data.username, loading:false}));
           },1000
       );
-     
-                   
-     
-      
   }
 
   render() {

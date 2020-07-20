@@ -4,22 +4,23 @@ import io from "socket.io-client"
 
 class Chatroom extends Component {
   state = {
-    username: null
+    username: null,
+    greetingNotice: ""
   }
 
   componentDidMount() {
        const socket = io.connect("http://localhost:3001/");
-           socket.emit("init", { name: "Jiwon"});
-
            socket.on("welcome", msg => {
-               console.log(msg);
+               this.setState({greetingNotice: msg})
            })
        
   }
 
   render() {
-   
-      return <ChatroomPresenter  />
+    const { greetingNotice } = this.state
+      return <ChatroomPresenter 
+      greetingNotice = {greetingNotice}
+      />
   }
 }
 

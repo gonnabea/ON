@@ -11,7 +11,7 @@
 - [x] React.js
 - [x] Node.js
 - [x] Styled-Components
-- [ ] Socket.io
+- [x] Socket.io
 
 - 본 프로젝트의 **주 목적은 SQL, webSocket에 대힌 학습**이며, Express.js + React.js의 조합에 익숙해지기 위해 구상한 사이드 프로젝트입니다. 
 
@@ -34,3 +34,6 @@
 - [ ] 공지
 - [ ] 접속상태 확인
 - [ ] 메세지 읽음 숫자
+
+## 보너스 
+- [ ] 챗봇
