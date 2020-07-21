@@ -6,7 +6,7 @@
 
 ## 사용 기술 스택
 
-- [ ] MySQL 💎
+- [x] MySQL 💎
 - [x] Express.js
 - [x] React.js
 - [x] Node.js
