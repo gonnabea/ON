@@ -13,10 +13,10 @@ class Chatroom extends Component {
            socket.on("welcome", msg => {
                this.setState({greetingNotice: msg})
            })
-       
   }
 
   render() {
+      console.log(this.state.homeData)
     const { greetingNotice } = this.state
       return <ChatroomPresenter 
       greetingNotice = {greetingNotice}

@@ -1,7 +1,6 @@
-const HOME = "/";
+const HOME = "/home";
 const CHATROOM = "/chatroom/:id";
 const API = "/api";
-const SOCKETIO = "/socket.io/socket.io.js"
 
 const routes = {
     home: HOME,
@@ -9,8 +8,7 @@ const routes = {
         if(id) return `/chatroom/${id}`;
         else return CHATROOM;
     },
-    api: API,
-    socketIO: SOCKETIO
+    api: API
 }
 
 export default routes;

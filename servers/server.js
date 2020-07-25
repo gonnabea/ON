@@ -7,7 +7,7 @@ import morgan from "morgan";
 import { socketController } from "./socket-server/socketContoller";
 import mysql from "mysql2";
 import db from "../models";
-import router from "./router";
+import chatRouter from "./chatRouter";
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -109,7 +109,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(morgan("dev"));
 app.use('/api', (req, res) => res.json({username:'Jiwon'}));
-app.use(router);
+app.use(chatRouter);
 
 
 db.sequelize.sync().then(() => {
