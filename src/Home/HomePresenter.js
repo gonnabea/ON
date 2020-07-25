@@ -18,5 +18,6 @@ export default (props) =>
         {props.loading===true ? "Now Loading..." : ""}
     </span>
     {props.username ? `Hello ${props.username} from Home!!` : ""}
-    <Cube width={200} />
+    <Cube width={100} />
+    <Cube width={100} />
 </Container>

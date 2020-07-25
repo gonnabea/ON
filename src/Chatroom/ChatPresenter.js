@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import Box from "../Components/3D-Cube";
+import Friends from "../Components/Friends";
 
 const Container = styled.section`
 width: 100vw;
@@ -56,14 +58,20 @@ border-radius: 5px;
 
 const ChatroomPresenter = ({greetingNotice}) => 
 <Container>
-<cite>Chatroom</cite>
+<Box width={600} frontBg="skyblue" leftBg="white" 
+front={
 <ChatBox>
-<GreetingNotice>{greetingNotice}</GreetingNotice>
-<ChatForm action={`/chatroom`} method="post">
+    <GreetingNotice>{greetingNotice}</GreetingNotice>
+    <ChatForm action={`/chatroom`} method="post">
     <ChatText type="text" name="content" required={true} />
     <ChatSubmit type="submit" value="전송" />  
 </ChatForm>
 </ChatBox>
+}
+left={
+    <Friends />
+}
+/>
 </Container>;
 
 export default ChatroomPresenter;

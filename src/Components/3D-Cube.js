@@ -9,35 +9,41 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     transform-style: preserve-3d; /* 이것을 설정해 주어야 rotate를 했을 때 3d의 형태로 보인다. */
-    animation: rotateBox 3s infinite linear;
+    :hover{
+    animation: rotateBox 1s forwards linear;
+    }
     @keyframes rotateBox{
         from{
-            transform:  rotateX(0);
+      
         }
         to{
-            transform:  rotateY(360deg);
+            transform:  rotateY(90deg);
         }
     }
 `;
 
 const Front = styled.div`
-    background-color:black;
+    background-color: ${props => props.frontBg ? props.frontBg : "black"};
     width: ${props => props.width}px;
     height: ${props => props.width}px;
     position: absolute;
     transform: translateZ(${props => props.width/2}px); /* 앞쪽으로 당김  */
+    
+    display: flex;  
+    justify-content: center;
+    align-items: center;
 `;
 
 const Back = styled.div`
-    background-color: purple;
+    background-color: black;
     width: ${props => props.width}px;
     height: ${props => props.width}px;
     position: absolute;
-    transform: translateZ(-${props => props.width/2}px) scaleX(-1); /* scaleY: 글자 상하 반전 */
+    transform: translateZ(-${props => props.width/2}px) scaleX(-1); /* scaleX: 글자 좌우 반전 */
 `;
 
 const Bottom = styled.div`
-    background-color:orange;
+    background-color: black;
     width: ${props => props.width}px;
     height: ${props => props.width}px;
     position:absolute;
@@ -46,7 +52,7 @@ const Bottom = styled.div`
 `;
 
 const Top = styled.div`
-    background-color:blue;
+    background-color: black;
     width: ${props => props.width}px;
     height: ${props => props.width}px;
     position:absolute;
@@ -55,7 +61,7 @@ const Top = styled.div`
 `;  
 
 const Left = styled.div`
-    background-color:pink;
+    background-color: ${props => props.leftBg ? props.leftBg : "black"};
     width: ${props => props.width}px;
     height: ${props => props.width}px;
     position:absolute;
@@ -63,25 +69,24 @@ const Left = styled.div`
 `;
 
 const Right = styled.div`
-    background-color:green;
-    background-color:pink;
+    background-color: black;
     width: ${props => props.width}px;
     height: ${props => props.width}px;
     position:absolute;
     transform: rotateY(-90deg) translateZ(-${props => props.width/2}px) scaleX(-1);
 `;
 
-const Box = ({width}) => {
+const Box = ({width, front, back, bottom, top, left, right, frontBg, leftBg}) => {
 
     console.log(width);
 
     return(
     <Container width={width}>
-        <Front width={width}>앞면</Front>
+        <Front width={width} frontBg={frontBg}>{front}</Front>
         <Back width={width}>뒷면</Back>
         <Bottom width={width}>아랫면</Bottom>
         <Top width={width}>윗면</Top>
-        <Left width={width}>왼쪽면</Left>
+        <Left width={width} leftBg={leftBg}>{left}</Left>
         <Right width={width}>오른쪽면</Right>
     </Container>
     )
