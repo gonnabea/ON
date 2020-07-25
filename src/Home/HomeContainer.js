@@ -17,9 +17,6 @@ class Home extends Component {
                    .then(data=>this.setState({username:data.username, loading:false}));
           },1000
       );
-      fetch("home")
-      .then(res=>res.json())
-      .then(data=>this.setState({homeData:data}));
   }
 
   render() {

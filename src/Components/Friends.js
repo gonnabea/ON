@@ -15,7 +15,7 @@ const Search = styled.input`
     background-color: #EEEEEE;
 `;
 
-const mainArea = styled.section`
+const MainArea = styled.section`
 
 `;
 
@@ -46,13 +46,13 @@ const Friends = () => {
             <cite>친구</cite>
         <Search type="text" placeholder="이름 검색"></Search>
         </Header>
-        <mainArea>
+        <MainArea>
             <MyProfile>sadasdd</MyProfile>
             <Divider>친구 0</Divider>
             <FriendsList>
                 <Friend>asdds</Friend>
             </FriendsList>
-        </mainArea>
+        </MainArea>
 
     </Container>
     )

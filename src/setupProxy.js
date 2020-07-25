@@ -6,7 +6,7 @@ module.exports = function(app){
           target: 'http://localhost:3001/',
           changeOrigin: true
       }),
-      createProxyMiddleware('/home', {
+      createProxyMiddleware('/chat', {
         target: 'http://localhost:3001/',
         changeOrigin: true
     })

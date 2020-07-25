@@ -17,7 +17,7 @@ const Container = styled.div`
       
         }
         to{
-            transform:  rotateY(90deg);
+            transform:  rotateY(30deg);
         }
     }
 `;

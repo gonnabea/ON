@@ -5,21 +5,27 @@ import io from "socket.io-client"
 class Chatroom extends Component {
   state = {
     username: null,
-    greetingNotice: ""
+    greetingNotice: "",
+    msg: ""
   }
 
-  componentDidMount() {
+  async componentDidMount() {
        const socket = io.connect("http://localhost:3001/");
            socket.on("welcome", msg => {
                this.setState({greetingNotice: msg})
            })
+           fetch("chat").then(res => res.json()).then(
+             data => this.setState({msg: data})
+           )
+           
   }
 
   render() {
-      console.log(this.state.homeData)
-    const { greetingNotice } = this.state
+    const { greetingNotice, msg } = this.state
+    console.log(msg[0])
       return <ChatroomPresenter 
       greetingNotice = {greetingNotice}
+      msg = {msg ? msg[msg.length-1].text : "message's not updated"}
       />
   }
 }

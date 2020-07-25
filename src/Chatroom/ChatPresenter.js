@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Box from "../Components/3D-Cube";
 import Friends from "../Components/Friends";
+import MsgBox from "../Components/MsgBox";
 
 const Container = styled.section`
 width: 100vw;
@@ -56,13 +57,14 @@ padding: 10px;
 border-radius: 5px;
 `
 
-const ChatroomPresenter = ({greetingNotice}) => 
+const ChatroomPresenter = ({greetingNotice, msg}) => 
 <Container>
 <Box width={600} frontBg="skyblue" leftBg="white" 
 front={
 <ChatBox>
     <GreetingNotice>{greetingNotice}</GreetingNotice>
-    <ChatForm action={`/chatroom`} method="post">
+    <MsgBox msg={msg} />
+    <ChatForm action="chat" method="post">
     <ChatText type="text" name="content" required={true} />
     <ChatSubmit type="submit" value="전송" />  
 </ChatForm>

@@ -1,9 +1,10 @@
 import express, { Router } from "express";
 import routes from "../routes";
-import { homeController } from "./chatController";
+import { chatController, postChat } from "./chatController";
 
 const router = express.Router();
 
-router.get(routes.home, homeController);
+router.get(routes.chat, chatController);
+router.post(routes.chat, postChat);
 
 export default router;
