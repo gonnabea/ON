@@ -1,7 +1,14 @@
 import React from "react";
 import styled from "styled-components";
+import Cube from "../Components/3D-Cube";
 
 const Container = styled.section`
+width: 100vw;
+height: 100vh;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
 `
 
 export default (props) => 
@@ -11,4 +18,5 @@ export default (props) =>
         {props.loading===true ? "Now Loading..." : ""}
     </span>
     {props.username ? `Hello ${props.username} from Home!!` : ""}
+    <Cube width={200} />
 </Container>
