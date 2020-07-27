@@ -13,19 +13,37 @@ align-items: center;
 flex-direction: column;
 `;
 
+const FrontContainer = styled.section`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+`;
+
 const ChatBox = styled.div`
-    background-color: rgba(255,255,255,0.9);
+    background-color: #F5F9FD;
     width: 60%;
-    height: 80%;
+    height: 90%;
     color: #363883;
+    border-radius: 5px;
+    box-shadow: 0 0 10px black;
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    border-radius: 5px;
+`
+
+const ChatScreen = styled.div`
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 50px 20px;
+    width: 100%;
 `
 
 const GreetingNotice = styled.p`
+    position: fixed;
     font-weight: 700;
     margin-top: 30px;
     background-color: rgba(0,0,0,0.3);
@@ -37,11 +55,16 @@ const GreetingNotice = styled.p`
 const ChatForm = styled.form`
     width: 100%;
     height: 10%;
+    position: absolute;
+    bottom: 0;
 `;
 
 const ChatText = styled.input`
     width: 100%;
     height: 100%;
+    border-radius: 5px;
+    border:none;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
 `;
 
 const ChatSubmit = styled.input`
@@ -57,22 +80,33 @@ padding: 10px;
 border-radius: 5px;
 `
 
-const ChatroomPresenter = ({greetingNotice, msg}) => 
+const ChatroomPresenter = ({greetingNotice, messages}) => 
 <Container>
-<Box width={600} frontBg="skyblue" leftBg="white" 
+    {console.log(messages)}
+<Box width={"600px"} frontBg="rgba(84, 141, 203, 0.9)" leftBg="rgba(255,255,255,1)" 
 front={
+    <FrontContainer>
 <ChatBox>
     <GreetingNotice>{greetingNotice}</GreetingNotice>
-    <MsgBox msg={msg} />
+    <ChatScreen>
+    {
+        messages.map( message => <MsgBox msg={message} />)
+    }
+    </ChatScreen>
     <ChatForm action="chat" method="post">
     <ChatText type="text" name="content" required={true} />
     <ChatSubmit type="submit" value="전송" />  
-</ChatForm>
+    </ChatForm>
 </ChatBox>
+
+    </FrontContainer>
+
+    
 }
 left={
     <Friends />
 }
+
 />
 </Container>;
 

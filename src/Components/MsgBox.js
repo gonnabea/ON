@@ -2,14 +2,16 @@ import React from "react";
 import styled from "styled-components";
 
 const Container = styled.section`
-    background-color: yellow;
-    width: 100px;
-    height: 50px;
+    background-color: #548DCB;
+    max-width: 200px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #548DCB;
 `;
 
 const Message = styled.p`
-color: black;
+color: white;
 font-size: 16px;
+margin: 10px;
 `
 
 const MsgBox = ({msg}) => 

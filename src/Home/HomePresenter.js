@@ -15,7 +15,7 @@ export default (props) =>
 <Container>
     {console.log(props)}
     <span>
-        {props.loading===true ? "Now Loading..." : ""}
+        {props.loading === true ? "Now Loading..." : ""}
     </span>
     {props.username ? `Hello ${props.username} from Home!!` : ""}
     <Cube width={100} />

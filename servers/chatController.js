@@ -1,4 +1,5 @@
 import db from "../models";
+import routes from "../routes";
 
 export const chatController = async(req, res) => {
     // db.Chat.findAll().then(chats => res.json({chats}))
@@ -7,8 +8,14 @@ export const chatController = async(req, res) => {
 }
 
 export const postChat = async(req, res) => {
-    const chat = await db.Chat.create({
-        text: req.body.content
-    })
-    res.json(chat);
+
+    try{
+        const chat = await db.Chat.create({
+            text: req.body.content
+        })
+        res.json(chat);
+
+    }catch(err) {
+        console.log(err);
+    }
 }

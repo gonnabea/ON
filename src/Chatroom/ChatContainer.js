@@ -6,7 +6,7 @@ class Chatroom extends Component {
   state = {
     username: null,
     greetingNotice: "",
-    msg: ""
+    msg: []
   }
 
   async componentDidMount() {
@@ -15,7 +15,7 @@ class Chatroom extends Component {
                this.setState({greetingNotice: msg})
            })
            fetch("chat").then(res => res.json()).then(
-             data => this.setState({msg: data})
+             data => this.setState({msg: data.map( model => model.text )})
            )
            
   }
@@ -25,7 +25,7 @@ class Chatroom extends Component {
     console.log(msg[0])
       return <ChatroomPresenter 
       greetingNotice = {greetingNotice}
-      msg = {msg ? msg[msg.length-1].text : "message's not updated"}
+      messages = {msg}
       />
   }
 }
