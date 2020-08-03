@@ -6,8 +6,13 @@ import SocketIO from "socket.io";
 import morgan from "morgan";
 import { socketController } from "./socket-server/socketContoller";
 import mysql from "mysql2";
-import db from "../models";
+import db from "./models";
 import chatRouter from "./chatRouter";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import passport from "passport";
+import "./passport";
+
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -105,8 +110,14 @@ app.get('/deletepost/:id', (req, res) => {
 
 app.use(cors());
 app.use(helmet());
+app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({
+    secret: 'keyboard cat', resave: true, saveUninitialized: true
+}));
+app.use(passport.initialize())
+app.use(passport.session());
 app.use(morgan("dev"));
 app.use('/api', (req, res) => res.json({username:'Jiwon'}));
 app.use(chatRouter);

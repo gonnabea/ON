@@ -9,6 +9,14 @@ module.exports = function(app){
       createProxyMiddleware('/chat', {
         target: 'http://localhost:3001/',
         changeOrigin: true
-    })
+    }),
+    createProxyMiddleware('/login', {
+      target: 'http://localhost:3001/',
+      changeOrigin: true
+    }),
+    createProxyMiddleware('/join', {
+      target: 'http://localhost:3001/',
+      changeOrigin: true
+    })  
   )
 };
