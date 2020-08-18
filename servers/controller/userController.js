@@ -1,31 +1,32 @@
-
-import db from "../models";
-import passport from "passport";
-import routes from "../routes";
+import db from "../models"
+import passport from "passport"
+import routes from "../routes"
 
 export const postLogin = () => {
-    return passport.authenticate('local', { failureRedirect: routes.login }),
-   (req, res) => {
-     res.redirect(routes.home);
-   }
- }
-
-
- export const userController = async(req, res) => {
-    // db.Chat.findAll().then(chats => res.json({chats}))
-    const all = await db.User.findAll();
-    res.send(all)
+  return (
+    passport.authenticate("local", { failureRedirect: routes.login }),
+    (req, res) => {
+      res.redirect(routes.home)
+    }
+  )
 }
 
-export const postJoin = (req, res) => {
-    const { body: {username, password, password2} } = req;
+export const userController = async (req, res) => {
+  // db.Chat.findAll().then(chats => res.json({chats}))
+  const all = await db.User.findAll()
+  res.send(all)
+}
 
-    try{
-        db.User.create({
-            username,
-            password
-        })
-    }catch(err){
-        console.log(err);
-    }
+export const postJoin = async (req, res) => {
+  const {
+    body: { username, password, password2 },
+  } = req
+  console.log(username)
+  try {
+    await db.User.create({
+      username,
+    })
+  } catch (err) {
+    console.log(err)
+  }
 }

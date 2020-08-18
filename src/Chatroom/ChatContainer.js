@@ -1,33 +1,33 @@
-import React, { Component } from 'react';
-import ChatroomPresenter from "./ChatPresenter";
+import React, { Component } from "react"
+import ChatroomPresenter from "./ChatPresenter"
 import io from "socket.io-client"
 
 class Chatroom extends Component {
   state = {
     username: null,
     greetingNotice: "",
-    msg: []
+    msg: [],
   }
 
   async componentDidMount() {
-       const socket = io.connect("http://localhost:3001/");
-           socket.on("welcome", msg => {
-               this.setState({greetingNotice: msg})
-           })
-           fetch("chat").then(res => res.json()).then(
-             data => this.setState({msg: data.map( model => model.text )})
-           )
-           
+    const socket = io.connect("http://localhost:3001/")
+    socket.on("welcome", (msg) => {
+      this.setState({ greetingNotice: msg })
+    })
+    fetch("chat")
+      .then((res) => res.json())
+      .then((data) =>
+        this.setState({
+          msg: data.map((model) => model.text),
+        })
+      )
   }
 
   render() {
-    const { greetingNotice, msg } = this.state
+    const { greetingNotice, msg, username } = this.state
     console.log(msg[0])
-      return <ChatroomPresenter 
-      greetingNotice = {greetingNotice}
-      messages = {msg}
-      />
+    return <ChatroomPresenter greetingNotice={greetingNotice} messages={msg} usernames={username} />
   }
 }
 
-export default Chatroom;
+export default Chatroom
