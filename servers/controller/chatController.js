@@ -5,7 +5,7 @@ import routes from "../routes"
 export const chatController = async (req, res) => {
   // db.Chat.findAll().then(chats => res.json({chats}))
   const all = await db.Chat.findAll()
-
+  console.log(req.user)
   res.send(all)
 }
 
@@ -18,13 +18,4 @@ export const postChat = async (req, res) => {
   } catch (err) {
     console.log(err)
   }
-}
-
-export const postLogin = () => {
-  return (
-    passport.authenticate("local", { failureRedirect: routes.login }),
-    (req, res) => {
-      res.redirect(routes.home)
-    }
-  )
 }
