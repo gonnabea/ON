@@ -13,6 +13,7 @@ import session from "express-session"
 import passport from "passport"
 import dotenv from "dotenv"
 import "./passport"
+import flash from "connect-flash"
 
 const PORT = process.env.PORT || 3001 // dotenv 쓰면 프록시가 망가짐
 const app = express()
@@ -24,7 +25,7 @@ const MySQL = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: process.env.DB_PASSWORD,
-  database: "nodemysql",
+  database: "our_now",
 })
 
 // MySQL 컨넥트
@@ -108,6 +109,7 @@ app.get("/deletepost/:id", (req, res) => {
 
 app.use(cors())
 app.use(helmet())
+app.use(express.static("public"))
 app.use(cookieParser())
 app.use(bodyParser.json({ extended: true }))
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -115,12 +117,13 @@ app.use(
   session({
     secret: "keyboard cat",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
   })
 )
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(morgan("dev"))
+app.use(flash())
 app.use("/api", (req, res) => res.json({ username: "Jiwon" }))
 app.use(chatRouter)
 

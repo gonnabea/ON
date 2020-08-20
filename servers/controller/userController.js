@@ -5,6 +5,7 @@ import routes from "../routes"
 export const postLogin = passport.authenticate("local", {
   successRedirect: "/",
   failureRedirect: "/loginfailed",
+  failureFlash: true,
 })
 
 export const userController = async (req, res) => {
