@@ -1,8 +1,6 @@
 import passport from "passport"
-import passportLocal from "passport-local"
+import LocalStrategy from "passport-local"
 import db from "./models"
-
-const LocalStrategy = passportLocal
 
 passport.serializeUser(function (user, done) {
   console.log(`srealizing: ${user}`)

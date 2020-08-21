@@ -7,7 +7,8 @@ import morgan from "morgan"
 import { socketController } from "./socket-server/socketContoller"
 import mysql from "mysql2"
 import db from "./models"
-import chatRouter from "./chatRouter"
+import mainRouter from "./router/mainRouter"
+import userRouter from "./router/userRouter"
 import cookieParser from "cookie-parser"
 import session from "express-session"
 import passport from "passport"
@@ -124,8 +125,11 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(morgan("dev"))
 app.use(flash())
-app.use("/api", (req, res) => res.json({ username: "Jiwon" }))
-app.use(chatRouter)
+app.use("/currentUser", (req, res) =>
+  res.json({ username: req.user ? req.user.username : "Stranger" })
+)
+app.use(mainRouter)
+app.use(userRouter)
 
 db.sequelize.sync().then(() => {
   const server = app.listen(PORT, () => {

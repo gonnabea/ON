@@ -1,32 +1,27 @@
-import React, { Component } from 'react';
-import HomePresenter from "./HomePresenter";
+import React, { Component } from "react"
+import HomePresenter from "./HomePresenter"
 
 class Home extends Component {
   state = {
     username: null,
     loading: true,
-    homeData: null
+    homeData: null,
+    user: null,
   }
-  
-  
+
   async componentDidMount() {
-      setTimeout(
-          () => {
-              fetch('api')
-                   .then(res=>res.json())
-                   .then(data=>this.setState({username:data.username, loading:false}));
-          },1000
-      );
+    setTimeout(() => {
+      fetch("currentUser")
+        .then((res) => res.json())
+        .then((user) => this.setState({ user, username: user.username, loading: false }))
+    }, 1000)
   }
 
   render() {
-    const { username, loading } = this.state;
+    const { username, loading } = this.state
     console.log(this.state.homeData)
-      return <HomePresenter 
-      username={username}
-      loading={loading}
-    />
+    return <HomePresenter username={username} loading={loading} />
   }
 }
 
-export default Home;
+export default Home
