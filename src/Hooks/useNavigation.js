@@ -2,13 +2,26 @@ import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import { Link } from "react-router-dom"
 
-const Container = styled.section``
+const Container = styled.section`
+  width: 100%;
+`
 
 const Form = styled.form``
 
 const Input = styled.input``
 
 const Submit = styled.input``
+
+const Header = styled.div`
+  width: 100%;
+  height: 50px;
+  background-color: rgba(0, 0, 0, 0.5);
+`
+
+const SLink = styled(Link)`
+  color: white;
+  margin-right: 10px;
+`
 
 const Navigation = () => {
   const [user, setUser] = useState(null)
@@ -23,14 +36,21 @@ const Navigation = () => {
 
   return user ? (
     <Container>
-      <Link to="/chatroom/:id">Chatroom</Link>
-      <Link to="/">Home</Link>
-      Hello {user.username}!!
+      {console.log(user)}
+      <Header>
+        <SLink to="/">홈으로</SLink>
+        <SLink to="/chatroom/:id">채팅</SLink>
+        <a href="http://localhost:3001/logout" style={{ color: "white" }}>
+          Logout
+        </a>
+      </Header>
     </Container>
   ) : (
     <Container>
-      <Link to="/chatroom/:id">Chatroom</Link>
-      <Link to="/">Home</Link>
+      <Header>
+        <SLink to="/">홈으로</SLink>
+        <SLink to="/chatroom/:id">채팅</SLink>
+      </Header>
       <Form action="http://localhost:3001/login" method="post">
         <Input type="text" name="username" placeholder="username" required={true} />
         <Input type="password" name="password" placeholder="password" required={true} />

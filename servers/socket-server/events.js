@@ -1,3 +1,4 @@
 export const events = {
-    welcome: "welcome"
-};
+  welcome: "welcome",
+  sendMsg: "sendMsg",
+}

@@ -3,6 +3,9 @@ import styled from "styled-components"
 import Box from "../Components/3D-Cube"
 import Friends from "../Components/Friends"
 import MsgBox from "../Components/MsgBox"
+import Book from "../Components/3DBook"
+import Navigation from "../Hooks/useNavigation"
+import axios from "axios"
 
 const Container = styled.section`
   width: 100vw;
@@ -23,8 +26,8 @@ const FrontContainer = styled.section`
 
 const ChatBox = styled.div`
   background-color: #f5f9fd;
-  width: 60%;
-  height: 90%;
+  width: 100%;
+  height: 100%;
   color: #363883;
   border-radius: 5px;
   box-shadow: 0 0 10px black;
@@ -80,33 +83,68 @@ const ChatSubmit = styled.input`
   border-radius: 5px;
 `
 
-const ChatroomPresenter = ({ greetingNotice, messages, usernames }) => (
-  <Container>
-    {console.log(messages)}
-    <Box
-      width={"600px"}
-      frontBg="rgba(84, 141, 203, 0.9)"
-      leftBg="rgba(255,255,255,1)"
-      front={
-        <FrontContainer>
-          <ChatBox>
-            <GreetingNotice>{greetingNotice}</GreetingNotice>
-            <ChatScreen>
-              {messages.map((message) => (
-                <MsgBox msg={message} />
-              ))}
-              {usernames ? usernames.map((username) => <MsgBox msg={username} />) : null}
-            </ChatScreen>
-            <ChatForm action="chat" method="post">
-              <ChatText type="text" name="content" required={true} />
-              <ChatSubmit type="submit" value="전송" />
-            </ChatForm>
-          </ChatBox>
-        </FrontContainer>
-      }
-      left={<Friends />}
-    />
-  </Container>
-)
+const BookFront = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: #314458;
+  box-shadow: 0 0 10px white;
+  display: flex;
+`
+
+const ChatroomPresenter = ({ greetingNotice, messages, usernames, socket, newMessage, user }) => {
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log(e.target)
+    const message = document.getElementById("text")
+    console.log(message.value)
+    socket.emit("sendMsg", user.username + message.value)
+    axios({
+      method: "post",
+      url: `chat`,
+      data: {
+        username: user.username,
+        text: message.value,
+      },
+    })
+  }
+
+  return (
+    <Container>
+      {console.log(messages)}
+
+      <Book
+        width="350px"
+        height="500px"
+        spineWidth="50px"
+        state={true}
+        front={
+          <BookFront>
+            <span>
+              <Navigation />
+            </span>
+          </BookFront>
+        }
+        inside1={
+          <BookFront>
+            <ChatBox>
+              <GreetingNotice>{greetingNotice}</GreetingNotice>
+              <ChatScreen>
+                {messages.map((message) => (
+                  <MsgBox msg={message} />
+                ))}
+                {usernames ? usernames.map((username) => <MsgBox msg={username} />) : null}
+                {newMessage.map((message) => message)}
+              </ChatScreen>
+              <ChatForm onSubmit={handleSubmit} action="chat" method="post">
+                <ChatText id="text" type="text" name="content" required={true} />
+                <ChatSubmit type="submit" value="전송" />
+              </ChatForm>
+            </ChatBox>
+          </BookFront>
+        }
+      />
+    </Container>
+  )
+}
 
 export default ChatroomPresenter

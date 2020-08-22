@@ -125,9 +125,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(morgan("dev"))
 app.use(flash())
-app.use("/currentUser", (req, res) =>
-  res.json({ username: req.user ? req.user.username : "Stranger" })
-)
+app.use("/currentUser", (req, res) => res.json(req.user ? req.user : null))
 app.use(mainRouter)
 app.use(userRouter)
 

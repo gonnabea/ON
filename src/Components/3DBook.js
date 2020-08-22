@@ -1,18 +1,27 @@
 import React from "react"
-import styled from "styled-components"
+import styled, { keyframes } from "styled-components"
 import PropTypes from "prop-types"
+
+const openBook = () => keyframes`
+from {
+      transform: rotateY(0deg);
+    }
+    to {
+      transform: rotateY(-180deg);
+    }
+`
 
 const Container = styled.section`
   transform-style: preserve-3d;
   position: relative;
   color: white;
-  animation: rotate 3s forwards;
+  /* animation: rotate 3s forwards; */
   width: ${(props) => (props.width ? props.width : "!00px")};
   height: ${(props) => (props.height ? props.height : "150px")};
 
   @keyframes rotate {
     to {
-      transform: rotateY(180deg);
+      transform: rotateY(360deg);
     }
   }
 `
@@ -23,11 +32,9 @@ const Front = styled.div`
   height: ${(props) => (props.height ? props.height : "150px")};
   background-color: black;
   color: white;
+  animation: ${(props) => (props.state ? openBook : null)} 0.5s forwards linear;
+  transform-origin: top left;
 
-  :hover {
-    transform-origin: top left;
-    animation: openBook 2s forwards;
-  }
   @keyframes openBook {
     from {
       transform: rotateY(0deg);
@@ -127,10 +134,19 @@ const Inside6 = styled.div`
   border-radius: 0 3px 3px 0;
 `
 
-const Book = ({ width = "100px", height = "150px", spineWidth = "50px", front, inside1, back }) => {
+const Book = ({
+  width = "100px",
+  height = "150px",
+  spineWidth = "50px",
+  front,
+  inside1,
+  back,
+  spine,
+  state,
+}) => {
   return (
-    <Container width={width} height={height}>
-      <Front width={width} height={height} spineWidth={spineWidth}>
+    <Container width={width} height={height} state={state}>
+      <Front width={width} height={height} spineWidth={spineWidth} state={state}>
         {front}
       </Front>
       <Inside1 width={width} height={height} spineWidth={spineWidth}>
@@ -142,10 +158,10 @@ const Book = ({ width = "100px", height = "150px", spineWidth = "50px", front, i
       <Inside5 width={width} height={height} spineWidth={spineWidth}></Inside5>
 
       <Back width={width} height={height} spineWidth={spineWidth}>
-        back
+        {back}
       </Back>
       <Left width={width} height={height} spineWidth={spineWidth}>
-        spine
+        {spine}
       </Left>
     </Container>
   )
@@ -158,6 +174,7 @@ Book.propTypes = {
   front: PropTypes.element,
   inside: PropTypes.element,
   back: PropTypes.element,
+  spine: PropTypes.element,
 }
 
 export default Book
