@@ -135,7 +135,7 @@ const ChatroomPresenter = ({ greetingNotice, messages, usernames, socket, newMes
                 {usernames ? usernames.map((username) => <MsgBox msg={username} />) : null}
                 {newMessage.map((message) => message)}
               </ChatScreen>
-              <ChatForm onSubmit={handleSubmit} action="chat" method="post">
+              <ChatForm action="chat" method="post">
                 <ChatText id="text" type="text" name="content" required={true} />
                 <ChatSubmit type="submit" value="전송" />
               </ChatForm>

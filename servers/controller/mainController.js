@@ -5,7 +5,13 @@ import routes from "../routes"
 export const chatController = async (req, res) => {
   // db.Chat.findAll().then(chats => res.json({chats}))
   const all = await db.Chat.findAll()
-  console.log(req.user)
+
+  let users = []
+  all.map(async (chat) => {
+    const user = await db.User.findOne({ where: { id: chat.dataValues.UserId } })
+    users.push(user)
+  })
+  console.log(`userData: ${users}fdff`)
   res.send(all)
 }
 
@@ -13,6 +19,7 @@ export const postChat = async (req, res) => {
   try {
     const chat = await db.Chat.create({
       text: req.body.content,
+      UserId: req.user.id,
     })
     res.json(chat)
   } catch (err) {

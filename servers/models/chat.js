@@ -1,22 +1,17 @@
-const User = require("./user")
-
 module.exports = (sequelize, DataTypes) => {
-  const Chat = sequelize.define(
-    "Chat",
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-      },
-      text: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+  const Chat = sequelize.define("Chat", {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
-    {
-      User,
-    }
-  )
+    text: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  })
+  Chat.associate = (models) => {
+    Chat.belongsTo(models.User)
+  }
   return Chat
 }

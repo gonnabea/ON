@@ -18,15 +18,15 @@ class Chatroom extends Component {
       socket.on("welcome", (msg) => {
         this.setState({ greetingNotice: msg })
       })
-      socket.on("sendMsg", (newMessage) => {
-        console.log(newMessage)
-        this.setState({ newMessage })
-      })
+      // socket.on("sendMsg", (newMessage) => {
+      //   console.log(newMessage)
+      //   this.setState({ newMessage })
+      // })
       fetch("chat")
         .then((res) => res.json())
         .then((data) =>
           this.setState({
-            msg: data.map((model) => model.text),
+            msg: data.map((model) => model.username + model.text),
           })
         )
       fetch("currentUser")
