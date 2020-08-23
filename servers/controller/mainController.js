@@ -1,17 +1,17 @@
-import db from "../models"
+import db, { Sequelize } from "../models"
 import passport from "passport"
 import routes from "../routes"
 
 export const chatController = async (req, res) => {
   // db.Chat.findAll().then(chats => res.json({chats}))
-  const all = await db.Chat.findAll()
-
-  let users = []
-  all.map(async (chat) => {
-    const user = await db.User.findOne({ where: { id: chat.dataValues.UserId } })
-    users.push(user)
+  const all = await db.Chat.findAll({
+    include: [
+      {
+        model: db.User,
+      },
+    ],
   })
-  console.log(`userData: ${users}fdff`)
+  console.log(all)
   res.send(all)
 }
 

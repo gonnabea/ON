@@ -26,7 +26,7 @@ class Chatroom extends Component {
         .then((res) => res.json())
         .then((data) =>
           this.setState({
-            msg: data.map((model) => model.username + model.text),
+            msg: data.map((model) => model.User.username + model.text),
           })
         )
       fetch("currentUser")
