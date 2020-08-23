@@ -102,8 +102,7 @@ const ChatroomPresenter = ({ greetingNotice, messages, usernames, socket, newMes
       method: "post",
       url: `chat`,
       data: {
-        username: user.username,
-        text: message.value,
+        content: message.value,
       },
     })
   }
@@ -128,14 +127,14 @@ const ChatroomPresenter = ({ greetingNotice, messages, usernames, socket, newMes
           <BookFront>
             <ChatBox>
               <GreetingNotice>{greetingNotice}</GreetingNotice>
-              <ChatScreen>
+              <ChatScreen id="chatScreen">
                 {messages.map((message) => (
                   <MsgBox msg={message} />
                 ))}
                 {usernames ? usernames.map((username) => <MsgBox msg={username} />) : null}
                 {newMessage.map((message) => message)}
               </ChatScreen>
-              <ChatForm action="chat" method="post">
+              <ChatForm onSubmit={handleSubmit} action="chat" method="post">
                 <ChatText id="text" type="text" name="content" required={true} />
                 <ChatSubmit type="submit" value="전송" />
               </ChatForm>
