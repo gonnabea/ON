@@ -6,6 +6,7 @@ import MsgBox from "../Components/MsgBox"
 import Book from "../Components/3DBook"
 import Navigation from "../Hooks/useNavigation"
 import axios from "axios"
+import MyMsgBox from "../Components/MyMsgBox"
 
 const Container = styled.section`
   width: 100vw;
@@ -53,6 +54,7 @@ const GreetingNotice = styled.p`
   color: white;
   padding: 10px 5px;
   border-radius: 5px;
+  z-index: 100;
 `
 
 const ChatForm = styled.form`
@@ -91,22 +93,15 @@ const BookFront = styled.div`
   display: flex;
 `
 
-const ChatroomPresenter = ({ greetingNotice, messages, usernames, socket, newMessage, user }) => {
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log(e.target)
-    const message = document.getElementById("text")
-    console.log(message.value)
-    socket.emit("sendMsg", user.username + message.value)
-    axios({
-      method: "post",
-      url: `chat`,
-      data: {
-        content: message.value,
-      },
-    })
-  }
-
+const ChatroomPresenter = ({
+  greetingNotice,
+  messages,
+  usernames,
+  socket,
+  newMessage,
+  user,
+  handleSubmit,
+}) => {
   return (
     <Container>
       {console.log(messages)}
@@ -128,11 +123,17 @@ const ChatroomPresenter = ({ greetingNotice, messages, usernames, socket, newMes
             <ChatBox>
               <GreetingNotice>{greetingNotice}</GreetingNotice>
               <ChatScreen id="chatScreen">
-                {messages.map((message) => (
+                {messages.map((message) =>
+                  user && message.username === user.username ? (
+                    <MyMsgBox msg={message.text} username={message.username} />
+                  ) : (
+                    <MsgBox msg={message.text} username={message.username} />
+                  )
+                )}
+
+                {newMessage.map((message) => (
                   <MsgBox msg={message} />
                 ))}
-                {usernames ? usernames.map((username) => <MsgBox msg={username} />) : null}
-                {newMessage.map((message) => message)}
               </ChatScreen>
               <ChatForm onSubmit={handleSubmit} action="chat" method="post">
                 <ChatText id="text" type="text" name="content" required={true} />
