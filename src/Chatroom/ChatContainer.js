@@ -20,7 +20,7 @@ class Chatroom extends Component {
     console.log(e.target)
     const message = document.getElementById("text")
     console.log(message.value)
-    this.state.socket.emit("sendMsg", this.state.user.username + message.value)
+    this.state.socket.emit("sendMsg", { username: this.state.user.username, text: message.value })
     axios({
       method: "post",
       url: `chat`,
@@ -28,7 +28,7 @@ class Chatroom extends Component {
         content: message.value,
       },
     })
-    this.sentMessage.push(message.value)
+    this.sentMessage.push({ username: this.state.user.username, text: message.value })
     this.setState({ newMessage: this.sentMessage })
     message.value = ""
   }

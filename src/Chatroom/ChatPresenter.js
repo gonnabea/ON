@@ -104,7 +104,7 @@ const ChatroomPresenter = ({
 }) => {
   return (
     <Container>
-      {console.log(messages)}
+      {console.log(newMessage)}
 
       <Book
         width="350px"
@@ -131,9 +131,13 @@ const ChatroomPresenter = ({
                   )
                 )}
 
-                {newMessage.map((message) => (
-                  <MsgBox msg={message} />
-                ))}
+                {newMessage.map((message) =>
+                  user && message.username === user.username ? (
+                    <MyMsgBox msg={message.text} username={message.username} />
+                  ) : (
+                    <MsgBox msg={message.text} username={message.username} />
+                  )
+                )}
               </ChatScreen>
               <ChatForm onSubmit={handleSubmit} action="chat" method="post">
                 <ChatText id="text" type="text" name="content" required={true} />
