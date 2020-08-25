@@ -11,7 +11,7 @@ class App extends Component {
         <GlobalStyles />
 
         <Route exact path="/" component={Home} />
-        <Route path="/chatroom/:id" component={Chatroom} />
+        <Route path="/chatroom" component={Chatroom} />
       </div>
     )
   }

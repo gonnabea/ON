@@ -39,7 +39,7 @@ const Navigation = () => {
       {console.log(user)}
       <Header>
         <SLink to="/">홈으로</SLink>
-        <SLink to="/chatroom/:id">채팅</SLink>
+        <SLink to="/chatroom">채팅</SLink>
         <a href="http://localhost:3001/logout" style={{ color: "white" }}>
           Logout
         </a>
@@ -49,7 +49,7 @@ const Navigation = () => {
     <Container>
       <Header>
         <SLink to="/">홈으로</SLink>
-        <SLink to="/chatroom/:id">채팅</SLink>
+        <SLink to="/chatroom">채팅</SLink>
       </Header>
       <Form action="http://localhost:3001/login" method="post">
         <Input type="text" name="username" placeholder="username" required={true} />

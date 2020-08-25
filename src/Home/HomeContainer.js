@@ -10,11 +10,9 @@ class Home extends Component {
 
   async componentDidMount() {
     try {
-      setTimeout(() => {
-        fetch("currentUser")
-          .then((res) => res.json())
-          .then((user) => this.setState({ user }))
-      }, 1000)
+      fetch("currentUser")
+        .then((res) => res.json())
+        .then((user) => this.setState({ user }))
     } catch (error) {
       console.log(error)
     } finally {

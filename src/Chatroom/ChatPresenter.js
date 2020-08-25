@@ -7,6 +7,7 @@ import Book from "../Components/3DBook"
 import Navigation from "../Hooks/useNavigation"
 import axios from "axios"
 import MyMsgBox from "../Components/MyMsgBox"
+import { Link } from "react-router-dom"
 
 const Container = styled.section`
   width: 100vw;
@@ -91,9 +92,35 @@ const BookFront = styled.div`
   background-color: #314458;
   box-shadow: 0 0 10px white;
   display: flex;
+  flex-direction: column;
+  transform: scaleX(-1);
 `
 
-const ChatroomPresenter = ({ greetingNotice, messages, newMessage, user, handleSubmit }) => {
+const Inside = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: #314458;
+  box-shadow: 0 0 10px white;
+  display: flex;
+`
+
+const UserList = styled.ul`
+  display: flex;
+  flex-direction: column;
+`
+
+const ChatRoomLink = styled(Link)`
+  color: white;
+  background-color: grey;
+`
+const ChatroomPresenter = ({
+  greetingNotice,
+  messages,
+  newMessage,
+  user,
+  handleSubmit,
+  userList,
+}) => {
   return (
     <Container>
       {console.log(newMessage)}
@@ -108,10 +135,21 @@ const ChatroomPresenter = ({ greetingNotice, messages, newMessage, user, handleS
             <span>
               <Navigation />
             </span>
+            <UserList>
+              {userList
+                ? userList.map((user) => {
+                    return (
+                      <ChatRoomLink to={`/chatroom/${user.id}`}>
+                        {user.username}({user.status === "active" ? "온라인" : "오프라인"})
+                      </ChatRoomLink>
+                    )
+                  })
+                : null}
+            </UserList>
           </BookFront>
         }
         inside1={
-          <BookFront>
+          <Inside>
             <ChatBox>
               <GreetingNotice>{greetingNotice}</GreetingNotice>
               <ChatScreen id="chatScreen">
@@ -136,7 +174,7 @@ const ChatroomPresenter = ({ greetingNotice, messages, newMessage, user, handleS
                 <ChatSubmit type="submit" value="전송" />
               </ChatForm>
             </ChatBox>
-          </BookFront>
+          </Inside>
         }
       />
     </Container>

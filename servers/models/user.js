@@ -30,6 +30,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: "active",
     },
   })
-
+  User.associate = (models) => {}
   return User
 }

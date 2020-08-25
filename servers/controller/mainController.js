@@ -4,15 +4,16 @@ import routes from "../routes"
 
 export const chatController = async (req, res) => {
   // db.Chat.findAll().then(chats => res.json({chats}))
-  const all = await db.Chat.findAll({
+  const allChat = await db.Chat.findAll({
     include: [
       {
         model: db.User,
       },
     ],
   })
-  console.log(all)
-  res.send(all)
+  const allUser = await db.User.findAll()
+
+  res.send({ allChat, allUser })
 }
 
 export const postChat = async (req, res) => {

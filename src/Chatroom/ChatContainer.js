@@ -11,12 +11,14 @@ class Chatroom extends Component {
     socket: null,
     newMessage: [],
     user: null,
+    userList: null,
   }
 
   sentMessage = this.state.newMessage
 
   handleSubmit = (e) => {
     e.preventDefault()
+
     const message = document.getElementById("text")
 
     const { socket } = this.state
@@ -49,17 +51,20 @@ class Chatroom extends Component {
       }) // 메세지 받기 , recieving message
       fetch("chat")
         .then((res) => res.json())
-        .then((data) =>
+        .then((data) => {
+          console.log(data)
           this.setState({
-            msg: data.map((model) => {
+            msg: data.allChat.map((model) => {
               const { username, avatar } = model.User
               return { username, text: model.text, avatar }
             }),
+            userList: data.allUser,
           })
-        )
+        })
       fetch("currentUser")
         .then((res) => res.json())
         .then((user) => this.setState({ user }))
+
       this.setState({ socket })
     } catch (err) {
       console.log(err)
@@ -67,7 +72,8 @@ class Chatroom extends Component {
   }
 
   render() {
-    const { greetingNotice, msg, username, socket, newMessage, user } = this.state
+    const { greetingNotice, msg, username, socket, newMessage, user, userList } = this.state
+    console.log(userList)
 
     return (
       <ChatroomPresenter
@@ -77,6 +83,7 @@ class Chatroom extends Component {
         socket={socket}
         newMessage={newMessage}
         user={user}
+        userList={userList}
         handleSubmit={this.handleSubmit}
       />
     )
