@@ -13,14 +13,15 @@ class Chatroom extends Component {
     user: null,
   }
 
-  sentMessage = []
+  sentMessage = this.state.newMessage
 
   handleSubmit = (e) => {
     e.preventDefault()
-    console.log(e.target)
     const message = document.getElementById("text")
-    console.log(message.value)
-    this.state.socket.emit("sendMsg", { username: this.state.user.username, text: message.value })
+
+    const { socket } = this.state
+    const { username } = this.state.user
+    socket.emit("sendMsg", { username, text: message.value })
     axios({
       method: "post",
       url: `chat`,
@@ -28,7 +29,8 @@ class Chatroom extends Component {
         content: message.value,
       },
     })
-    this.sentMessage.push({ username: this.state.user.username, text: message.value })
+
+    this.sentMessage.push({ username, text: message.value })
     this.setState({ newMessage: this.sentMessage })
     message.value = ""
   }
@@ -41,14 +43,17 @@ class Chatroom extends Component {
       })
       socket.on("sendMsg", (newMessage) => {
         console.log(newMessage)
-        this.setState({ newMessage })
+
+        this.sentMessage.push(newMessage[newMessage.length - 1])
+        this.setState({ newMessage: this.sentMessage })
       }) // 메세지 받기 , recieving message
       fetch("chat")
         .then((res) => res.json())
         .then((data) =>
           this.setState({
             msg: data.map((model) => {
-              return { username: model.User.username, text: model.text, avatar: model.User.avatar }
+              const { username, avatar } = model.User
+              return { username, text: model.text, avatar }
             }),
           })
         )
@@ -63,7 +68,7 @@ class Chatroom extends Component {
 
   render() {
     const { greetingNotice, msg, username, socket, newMessage, user } = this.state
-    console.log(msg)
+
     return (
       <ChatroomPresenter
         greetingNotice={greetingNotice}

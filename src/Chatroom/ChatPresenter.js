@@ -93,15 +93,7 @@ const BookFront = styled.div`
   display: flex;
 `
 
-const ChatroomPresenter = ({
-  greetingNotice,
-  messages,
-  usernames,
-  socket,
-  newMessage,
-  user,
-  handleSubmit,
-}) => {
+const ChatroomPresenter = ({ greetingNotice, messages, newMessage, user, handleSubmit }) => {
   return (
     <Container>
       {console.log(newMessage)}
@@ -123,19 +115,19 @@ const ChatroomPresenter = ({
             <ChatBox>
               <GreetingNotice>{greetingNotice}</GreetingNotice>
               <ChatScreen id="chatScreen">
-                {messages.map((message) =>
+                {messages.map((message, index) =>
                   user && message.username === user.username ? (
-                    <MyMsgBox msg={message.text} username={message.username} />
+                    <MyMsgBox key={index} msg={message.text} username={message.username} />
                   ) : (
-                    <MsgBox msg={message.text} username={message.username} />
+                    <MsgBox key={index} msg={message.text} username={message.username} />
                   )
                 )}
 
-                {newMessage.map((message) =>
+                {newMessage.map((message, index) =>
                   user && message.username === user.username ? (
-                    <MyMsgBox msg={message.text} username={message.username} />
+                    <MyMsgBox key={index} msg={message.text} username={message.username} />
                   ) : (
-                    <MsgBox msg={message.text} username={message.username} />
+                    <MsgBox key={index} msg={message.text} username={message.username} />
                   )
                 )}
               </ChatScreen>
