@@ -30,6 +30,9 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: "active",
     },
   })
-  User.associate = (models) => {}
+  User.associate = (models) => {
+    User.belongsToMany(models.ChatRoom, { through: "UserChatroom" })
+    User.hasMany(models.Chat)
+  }
   return User
 }

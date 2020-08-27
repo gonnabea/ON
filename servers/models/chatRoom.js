@@ -7,11 +7,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     text: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
   })
   ChatRoom.associate = (models) => {
-    ChatRoom.hasMany(models.User, { as: "participants" })
+    ChatRoom.hasMany(models.Chat)
+    ChatRoom.belongsToMany(models.User, { through: "UserChatroom" })
   }
   return ChatRoom
 }

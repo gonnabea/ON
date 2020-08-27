@@ -139,7 +139,7 @@ const ChatroomPresenter = ({
               {userList
                 ? userList.map((user) => {
                     return (
-                      <ChatRoomLink to={`/chatroom/${user.id}`}>
+                      <ChatRoomLink to={`/chatroom/${user.id}`} params={{ userId: user.id }}>
                         {user.username}({user.status === "active" ? "온라인" : "오프라인"})
                       </ChatRoomLink>
                     )

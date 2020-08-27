@@ -27,3 +27,18 @@ export const postChat = async (req, res) => {
     console.log(err)
   }
 }
+
+export const chatroom = async (req, res) => {
+  const { UserId } = req.body
+  console.log(UserId)
+  try {
+    const chatroom = await db.ChatRoom.create({
+      UserId,
+    })
+    console.log(chatroom)
+    const UserChatroom = await db.ChatRoom.findAll()
+    console.log(UserChatroom)
+  } catch (err) {
+    console.log(err)
+  }
+}
