@@ -32,9 +32,10 @@ const Front = styled.div`
   height: ${(props) => (props.height ? props.height : "150px")};
   background-color: black;
   color: white;
-  animation: ${(props) => (props.state ? openBook : null)} 0.5s forwards linear;
+  animation: ${(props) => (props.state && props.initState !== "open" ? openBook : null)} 0.5s
+    forwards linear;
   transform-origin: top left;
-
+  transform: ${(props) => (props.initState === "open" ? "rotateY(-180deg)" : null)};
   @keyframes openBook {
     from {
       transform: rotateY(0deg);
@@ -143,10 +144,17 @@ const Book = ({
   back,
   spine,
   state,
+  initState,
 }) => {
   return (
     <Container width={width} height={height} state={state}>
-      <Front width={width} height={height} spineWidth={spineWidth} state={state}>
+      <Front
+        width={width}
+        height={height}
+        spineWidth={spineWidth}
+        state={state}
+        initState={initState}
+      >
         {front}
       </Front>
       <Inside1 width={width} height={height} spineWidth={spineWidth}>

@@ -12,7 +12,7 @@ class App extends Component {
         <GlobalStyles />
 
         <Route exact path="/" component={Home} />
-        <Route path="/chatroom" component={Chatroom} />
+        <Route exact path="/chatroom" component={Chatroom} />
         <Route path="/chatroom/:id" component={MessageRoom} />
       </div>
     )

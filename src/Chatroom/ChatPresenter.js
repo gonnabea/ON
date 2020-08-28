@@ -120,6 +120,7 @@ const ChatroomPresenter = ({
   user,
   handleSubmit,
   userList,
+  enterRoom,
 }) => {
   return (
     <Container>
@@ -137,9 +138,14 @@ const ChatroomPresenter = ({
             </span>
             <UserList>
               {userList
-                ? userList.map((user) => {
+                ? userList.map((user, index) => {
                     return (
-                      <ChatRoomLink to={`/chatroom/${user.id}`} params={{ userId: user.id }}>
+                      <ChatRoomLink
+                        key={index}
+                        onClick={() => enterRoom(user.userID)}
+                        to={`/chatroom/${user.id}`}
+                        params={{ userId: user.id }}
+                      >
                         {user.username}({user.status === "active" ? "온라인" : "오프라인"})
                       </ChatRoomLink>
                     )

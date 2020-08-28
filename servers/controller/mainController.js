@@ -21,6 +21,7 @@ export const postChat = async (req, res) => {
     const chat = await db.Chat.create({
       text: req.body.content,
       UserId: req.user.id,
+      // ChatRoomId: req.user.id + req.body.targetUser,
     })
     res.json(chat)
   } catch (err) {

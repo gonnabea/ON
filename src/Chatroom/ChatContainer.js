@@ -12,6 +12,7 @@ class Chatroom extends Component {
     newMessage: [],
     user: null,
     userList: null,
+    userRoom: null,
   }
 
   sentMessage = this.state.newMessage
@@ -29,12 +30,17 @@ class Chatroom extends Component {
       url: `chat`,
       data: {
         content: message.value,
+        targetUser: this.state.userRoom,
       },
     })
 
     this.sentMessage.push({ username, text: message.value })
     this.setState({ newMessage: this.sentMessage })
     message.value = ""
+  }
+
+  enterRoom = (userID) => {
+    this.setState({ userRoom: userID })
   }
 
   async componentDidMount() {
@@ -85,6 +91,7 @@ class Chatroom extends Component {
         user={user}
         userList={userList}
         handleSubmit={this.handleSubmit}
+        enterRoom={this.enterRoom}
       />
     )
   }

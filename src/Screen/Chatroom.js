@@ -1,9 +1,12 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import styled from "styled-components"
 import Navigation from "../Hooks/useNavigation"
 import Book from "../Components/3DBook"
 import { Link } from "react-router-dom"
 import axios from "axios"
+import io from "socket.io-client"
+import MsgBox from "../Components/MsgBox"
+import MyMsgBox from "../Components/MyMsgBox"
 
 const Container = styled.section`
   width: 100vw;
@@ -112,6 +115,38 @@ const ChatRoomLink = styled(Link)`
 
 const Chatroom = (props) => {
   console.log(props)
+  const [username, setUsername] = useState()
+  const [flash, setFlash] = useState()
+  const [message, setMessage] = useState([])
+  const [socket, setSocket] = useState()
+  const [newMessage, setNewMessage] = useState([])
+  const [loggedUser, setLoggedUser] = useState()
+  const [userList, setUserList] = useState()
+  const [targetUser, setTargetUser] = useState()
+  let sentMessage = newMessage
+  const enterRoom = (userID) => {
+    setTargetUser(userID)
+  }
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    const message = document.getElementById("text")
+
+    const { username } = loggedUser
+    socket.emit("sendMsg", { username, text: message.value })
+    axios({
+      method: "post",
+      url: `chat`,
+      data: {
+        content: message.value,
+        targetUser,
+      },
+    })
+    sentMessage.push({ username, text: message.value })
+
+    setNewMessage(sentMessage)
+    message.value = ""
+  }
   useEffect(() => {
     axios({
       method: "post",
@@ -120,6 +155,39 @@ const Chatroom = (props) => {
         UserId: props.match.params.id,
       },
     })
+    try {
+      const socket = io.connect("http://localhost:3001/")
+      socket.on("welcome", (msg) => {
+        setFlash(msg)
+      })
+      socket.on("sendMsg", (newMessage) => {
+        console.log(newMessage)
+
+        sentMessage.push(newMessage[newMessage.length - 1])
+
+        setNewMessage(sentMessage)
+      }) // 메세지 받기 , recieving message
+      fetch("chat")
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data)
+
+          setMessage(
+            data.allChat.map((model) => {
+              const { username, avatar } = model.User
+              return { username, text: model.text, avatar }
+            })
+          )
+          setUserList(data.allUser)
+        })
+      fetch("currentUser")
+        .then((res) => res.json())
+        .then((user) => setLoggedUser({ user }))
+
+      setSocket(socket)
+    } catch (err) {
+      console.log(err)
+    }
   }, [])
 
   return (
@@ -129,17 +197,59 @@ const Chatroom = (props) => {
         height="500px"
         spineWidth="50px"
         state={true}
+        initState={"open"}
         front={
           <BookFront>
             <span>
               <Navigation />
+
+              <UserList>
+                {userList
+                  ? userList.map((user, index) => {
+                      return (
+                        <ChatRoomLink
+                          key={index}
+                          onClick={() => enterRoom(user.userID)}
+                          to={`/chatroom/${user.id}`}
+                          params={{ userId: user.id }}
+                        >
+                          {user.username}({user.status === "active" ? "온라인" : "오프라인"})
+                        </ChatRoomLink>
+                      )
+                    })
+                  : null}
+              </UserList>
             </span>
             <UserList></UserList>
           </BookFront>
         }
         inside1={
           <Inside>
-            <ChatBox></ChatBox>
+            <ChatBox>
+              <GreetingNotice>{flash}</GreetingNotice>
+              <ChatScreen id="chatScreen">
+                {console.log(message)}
+                {message.map((message, index) =>
+                  loggedUser && message.username === loggedUser.username ? (
+                    <MyMsgBox key={index} msg={message.text} username={message.username} />
+                  ) : (
+                    <MsgBox key={index} msg={message.text} username={message.username} />
+                  )
+                )}
+
+                {newMessage.map((message, index) =>
+                  loggedUser && message.username === loggedUser.username ? (
+                    <MyMsgBox key={index} msg={message.text} username={message.username} />
+                  ) : (
+                    <MsgBox key={index} msg={message.text} username={message.username} />
+                  )
+                )}
+              </ChatScreen>
+              <ChatForm onSubmit={handleSubmit} action="chat" method="post">
+                <ChatText id="text" type="text" name="content" required={true} />
+                <ChatSubmit type="submit" value="전송" />
+              </ChatForm>
+            </ChatBox>
           </Inside>
         }
       />
