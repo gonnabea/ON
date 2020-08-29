@@ -1,7 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
   const ChatRoom = sequelize.define("ChatRoom", {
     id: {
-      type: DataTypes.STRING,
+      type: DataTypes.CHAR,
+
       primaryKey: true,
     },
     text: {

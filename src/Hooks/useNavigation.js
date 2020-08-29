@@ -36,7 +36,6 @@ const Navigation = () => {
 
   return user ? (
     <Container>
-      {console.log(user)}
       <Header>
         <SLink to="/">홈으로</SLink>
         <SLink to="/chatroom">채팅</SLink>

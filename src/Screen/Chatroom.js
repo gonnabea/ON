@@ -114,7 +114,6 @@ const ChatRoomLink = styled(Link)`
 `
 
 const Chatroom = (props) => {
-  console.log(props)
   const [username, setUsername] = useState()
   const [flash, setFlash] = useState()
   const [message, setMessage] = useState([])
@@ -124,8 +123,17 @@ const Chatroom = (props) => {
   const [userList, setUserList] = useState()
   const [targetUser, setTargetUser] = useState()
   let sentMessage = newMessage
-  const enterRoom = (userID) => {
-    setTargetUser(userID)
+  const enterRoom = (user) => {
+    setTargetUser(user)
+
+    axios({
+      method: "post",
+      timeout: 100, // 쓰로틀링 방지
+      url: "chatroom",
+      data: {
+        UserId: user.id,
+      },
+    })
   }
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -133,13 +141,15 @@ const Chatroom = (props) => {
     const message = document.getElementById("text")
 
     const { username } = loggedUser
+    console.log(targetUser)
     socket.emit("sendMsg", { username, text: message.value })
     axios({
       method: "post",
       url: `chat`,
+      timeout: 100, // 쓰로틀링 방지
       data: {
         content: message.value,
-        targetUser,
+        targetID: targetUser.id,
       },
     })
     sentMessage.push({ username, text: message.value })
@@ -148,13 +158,6 @@ const Chatroom = (props) => {
     message.value = ""
   }
   useEffect(() => {
-    axios({
-      method: "post",
-      url: "chatroom",
-      data: {
-        UserId: props.match.params.id,
-      },
-    })
     try {
       const socket = io.connect("http://localhost:3001/")
       socket.on("welcome", (msg) => {
@@ -170,8 +173,6 @@ const Chatroom = (props) => {
       fetch("chat")
         .then((res) => res.json())
         .then((data) => {
-          console.log(data)
-
           setMessage(
             data.allChat.map((model) => {
               const { username, avatar } = model.User
@@ -209,9 +210,8 @@ const Chatroom = (props) => {
                       return (
                         <ChatRoomLink
                           key={index}
-                          onClick={() => enterRoom(user.userID)}
+                          onClick={() => enterRoom(user)}
                           to={`/chatroom/${user.id}`}
-                          params={{ userId: user.id }}
                         >
                           {user.username}({user.status === "active" ? "온라인" : "오프라인"})
                         </ChatRoomLink>
@@ -228,7 +228,6 @@ const Chatroom = (props) => {
             <ChatBox>
               <GreetingNotice>{flash}</GreetingNotice>
               <ChatScreen id="chatScreen">
-                {console.log(message)}
                 {message.map((message, index) =>
                   loggedUser && message.username === loggedUser.username ? (
                     <MyMsgBox key={index} msg={message.text} username={message.username} />

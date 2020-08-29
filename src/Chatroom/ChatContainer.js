@@ -12,36 +12,19 @@ class Chatroom extends Component {
     newMessage: [],
     user: null,
     userList: null,
-    userRoom: null,
+    targetUser: null,
   }
 
-  sentMessage = this.state.newMessage
-
-  handleSubmit = (e) => {
-    e.preventDefault()
-
-    const message = document.getElementById("text")
-
-    const { socket } = this.state
-    const { username } = this.state.user
-    socket.emit("sendMsg", { username, text: message.value })
-    axios({
-      method: "post",
-      url: `chat`,
-      data: {
-        content: message.value,
-        targetUser: this.state.userRoom,
-      },
-    })
-
-    this.sentMessage.push({ username, text: message.value })
-    this.setState({ newMessage: this.sentMessage })
-    message.value = ""
-  }
-
-  enterRoom = (userID) => {
-    this.setState({ userRoom: userID })
-  }
+  // enterRoom = (user) => {
+  //   this.setState({ targetUser: user })
+  //   axios({
+  //     method: "post",
+  //     url: "chatroom",
+  //     data: {
+  //       UserId: user.id,
+  //     },
+  //   })
+  // }
 
   async componentDidMount() {
     try {
@@ -49,12 +32,7 @@ class Chatroom extends Component {
       socket.on("welcome", (msg) => {
         this.setState({ greetingNotice: msg })
       })
-      socket.on("sendMsg", (newMessage) => {
-        console.log(newMessage)
 
-        this.sentMessage.push(newMessage[newMessage.length - 1])
-        this.setState({ newMessage: this.sentMessage })
-      }) // 메세지 받기 , recieving message
       fetch("chat")
         .then((res) => res.json())
         .then((data) => {

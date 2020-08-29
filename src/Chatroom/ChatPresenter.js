@@ -124,8 +124,6 @@ const ChatroomPresenter = ({
 }) => {
   return (
     <Container>
-      {console.log(newMessage)}
-
       <Book
         width="350px"
         height="500px"
@@ -142,9 +140,8 @@ const ChatroomPresenter = ({
                     return (
                       <ChatRoomLink
                         key={index}
-                        onClick={() => enterRoom(user.userID)}
+                        // onClick={() => enterRoom(user)}
                         to={`/chatroom/${user.id}`}
-                        params={{ userId: user.id }}
                       >
                         {user.username}({user.status === "active" ? "온라인" : "오프라인"})
                       </ChatRoomLink>
@@ -156,30 +153,7 @@ const ChatroomPresenter = ({
         }
         inside1={
           <Inside>
-            <ChatBox>
-              <GreetingNotice>{greetingNotice}</GreetingNotice>
-              <ChatScreen id="chatScreen">
-                {messages.map((message, index) =>
-                  user && message.username === user.username ? (
-                    <MyMsgBox key={index} msg={message.text} username={message.username} />
-                  ) : (
-                    <MsgBox key={index} msg={message.text} username={message.username} />
-                  )
-                )}
-
-                {newMessage.map((message, index) =>
-                  user && message.username === user.username ? (
-                    <MyMsgBox key={index} msg={message.text} username={message.username} />
-                  ) : (
-                    <MsgBox key={index} msg={message.text} username={message.username} />
-                  )
-                )}
-              </ChatScreen>
-              <ChatForm onSubmit={handleSubmit} action="chat" method="post">
-                <ChatText id="text" type="text" name="content" required={true} />
-                <ChatSubmit type="submit" value="전송" />
-              </ChatForm>
-            </ChatBox>
+            <ChatBox></ChatBox>
           </Inside>
         }
       />

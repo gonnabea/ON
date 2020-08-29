@@ -18,12 +18,11 @@ export const chatController = async (req, res) => {
 
 export const postChat = async (req, res) => {
   try {
-    const chat = await db.Chat.create({
+    await db.Chat.create({
       text: req.body.content,
       UserId: req.user.id,
-      // ChatRoomId: req.user.id + req.body.targetUser,
+      ChatRoomId: req.user.id + req.body.targetID,
     })
-    res.json(chat)
   } catch (err) {
     console.log(err)
   }
@@ -32,7 +31,7 @@ export const postChat = async (req, res) => {
 export const chatroom = async (req, res) => {
   const { UserId } = req.body
   const { id } = req.user
-  console.log(UserId)
+
   try {
     const loggedUser = await db.User.findOne({ where: { id } })
     const targetUser = await db.User.findOne({ where: { id: UserId } })
@@ -44,7 +43,7 @@ export const chatroom = async (req, res) => {
         id: loggedUser.id + targetUser.id,
         text: loggedUser.username + "'s chatroom for" + targetUser.username,
       },
-    }).then(async (result) => {
+    }).then((result) => {
       const created = result[1]
 
       if (created) {
@@ -52,16 +51,6 @@ export const chatroom = async (req, res) => {
         result[0].addUsers(loggedUser)
       }
     })
-
-    console.log(
-      await db.ChatRoom.findAll({
-        include: [
-          {
-            model: db.User,
-          },
-        ],
-      })
-    )
   } catch (err) {
     console.log(err)
   }
