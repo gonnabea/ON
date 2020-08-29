@@ -31,14 +31,37 @@ export const postChat = async (req, res) => {
 
 export const chatroom = async (req, res) => {
   const { UserId } = req.body
+  const { id } = req.user
   console.log(UserId)
   try {
-    const chatroom = await db.ChatRoom.create({
-      UserId,
+    const loggedUser = await db.User.findOne({ where: { id } })
+    const targetUser = await db.User.findOne({ where: { id: UserId } })
+    console.log(targetUser)
+
+    await db.ChatRoom.findOrCreate({
+      where: { id: loggedUser.id + targetUser.id },
+      defaults: {
+        id: loggedUser.id + targetUser.id,
+        text: loggedUser.username + "'s chatroom for" + targetUser.username,
+      },
+    }).then(async (result) => {
+      const created = result[1]
+
+      if (created) {
+        result[0].addUsers(targetUser)
+        result[0].addUsers(loggedUser)
+      }
     })
-    console.log(chatroom)
-    const UserChatroom = await db.ChatRoom.findAll()
-    console.log(UserChatroom)
+
+    console.log(
+      await db.ChatRoom.findAll({
+        include: [
+          {
+            model: db.User,
+          },
+        ],
+      })
+    )
   } catch (err) {
     console.log(err)
   }

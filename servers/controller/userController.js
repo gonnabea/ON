@@ -1,6 +1,7 @@
 import db from "../models"
 import passport from "passport"
 import routes from "../routes"
+import { Model } from "sequelize"
 
 export const postLogin = passport.authenticate("local", {
   successRedirect: "back",
@@ -10,7 +11,9 @@ export const postLogin = passport.authenticate("local", {
 
 export const userController = async (req, res) => {
   // db.Chat.findAll().then(chats => res.json({chats}))
-  const all = await db.User.findAll()
+  const all = await db.ChatRoom.findAll({
+    include: [{ model: db.User }],
+  })
   res.send(all)
 }
 

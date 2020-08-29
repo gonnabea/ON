@@ -1,9 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
   const ChatRoom = sequelize.define("ChatRoom", {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       primaryKey: true,
-      autoIncrement: true,
     },
     text: {
       type: DataTypes.STRING,
