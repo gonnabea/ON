@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import styled from "styled-components"
 import Navigation from "../Hooks/useNavigation"
 import Book from "../Components/3DBook"
@@ -7,6 +7,7 @@ import axios from "axios"
 import io from "socket.io-client"
 import MsgBox from "../Components/MsgBox"
 import MyMsgBox from "../Components/MyMsgBox"
+import { cleanup } from "@testing-library/react"
 
 const Container = styled.section`
   width: 100vw;
@@ -118,11 +119,12 @@ const Chatroom = (props) => {
   const [flash, setFlash] = useState()
   const [message, setMessage] = useState([])
   const [socket, setSocket] = useState()
-  const [newMessage, setNewMessage] = useState([])
+  const sentMessage = useRef([]) // 원래 let으로함 훅은 뭐가다른가
+  const newMessage = useRef([])
   const [loggedUser, setLoggedUser] = useState()
   const [userList, setUserList] = useState()
   const [targetUser, setTargetUser] = useState()
-  let sentMessage = newMessage
+  const [submit, setSubmit] = useState(0)
   const enterRoom = (user) => {
     setTargetUser(user)
 
@@ -135,40 +137,44 @@ const Chatroom = (props) => {
       },
     })
   }
+
   const handleSubmit = (e) => {
     e.preventDefault()
 
     const message = document.getElementById("text")
 
     const { username } = loggedUser
+    console.log(loggedUser)
     console.log(targetUser)
     socket.emit("sendMsg", { username, text: message.value })
     axios({
       method: "post",
       url: `chat`,
-      timeout: 100, // 쓰로틀링 방지
+      timeout: 1000, // 쓰로틀링 방지
       data: {
         content: message.value,
         targetID: targetUser.id,
       },
     })
-    sentMessage.push({ username, text: message.value })
 
-    setNewMessage(sentMessage)
+    newMessage.current.push({ username, text: message.value })
+    setSubmit(submit + 1)
+    console.log(newMessage.current)
     message.value = ""
   }
+
   useEffect(() => {
     try {
       const socket = io.connect("http://localhost:3001/")
+      setSocket(socket)
       socket.on("welcome", (msg) => {
         setFlash(msg)
       })
-      socket.on("sendMsg", (newMessage) => {
-        console.log(newMessage)
-
-        sentMessage.push(newMessage[newMessage.length - 1])
-
-        setNewMessage(sentMessage)
+      socket.on("sendMsg", (msg) => {
+        console.log(msg)
+        newMessage.current.push({ username: msg.username, text: msg.text })
+        setSubmit((submit) => submit + 1)
+        console.log(submit)
       }) // 메세지 받기 , recieving message
       fetch("chat")
         .then((res) => res.json())
@@ -183,13 +189,14 @@ const Chatroom = (props) => {
         })
       fetch("currentUser")
         .then((res) => res.json())
-        .then((user) => setLoggedUser({ user }))
-
-      setSocket(socket)
+        .then((user) => setLoggedUser(user))
     } catch (err) {
       console.log(err)
     }
-  }, [])
+    return () => {
+      console.log("cleaned up")
+    }
+  }, [newMessage])
 
   return (
     <Container>
@@ -236,7 +243,7 @@ const Chatroom = (props) => {
                   )
                 )}
 
-                {newMessage.map((message, index) =>
+                {newMessage.current.map((message, index) =>
                   loggedUser && message.username === loggedUser.username ? (
                     <MyMsgBox key={index} msg={message.text} username={message.username} />
                   ) : (
