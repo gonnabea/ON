@@ -5,6 +5,7 @@ const API = "/api"
 const LOGIN = "/login"
 const LOGOUT = "/logout"
 const JOIN = "/join"
+const FINDCHAT = "/find-chat"
 
 const routes = {
   home: HOME,
@@ -14,6 +15,7 @@ const routes = {
   login: LOGIN,
   logout: LOGOUT,
   join: JOIN,
+  findChat: FINDCHAT,
 }
 
 export default routes

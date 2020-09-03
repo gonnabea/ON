@@ -140,8 +140,11 @@ const ChatroomPresenter = ({
                     return (
                       <ChatRoomLink
                         key={index}
-                        // onClick={() => enterRoom(user)}
-                        to={`/chatroom/${user.id}`}
+                        onClick={() => enterRoom(user)}
+                        to={{
+                          pathname: `/chatroom/${user.id}`,
+                          targetUser: user,
+                        }}
                       >
                         {user.username}({user.status === "active" ? "온라인" : "오프라인"})
                       </ChatRoomLink>

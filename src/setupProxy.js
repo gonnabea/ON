@@ -29,6 +29,10 @@ module.exports = function (app) {
     createProxyMiddleware("/chatroom", {
       target: "http://localhost:3001/",
       changeOrigin: true,
+    }),
+    createProxyMiddleware("/find-chat", {
+      target: "http://localhost:3001/",
+      changeOrigin: true,
     })
   )
 }

@@ -15,16 +15,18 @@ class Chatroom extends Component {
     targetUser: null,
   }
 
-  // enterRoom = (user) => {
-  //   this.setState({ targetUser: user })
-  //   axios({
-  //     method: "post",
-  //     url: "chatroom",
-  //     data: {
-  //       UserId: user.id,
-  //     },
-  //   })
-  // }
+  enterRoom = async (user) => {
+    console.log(user)
+    this.setState({ targetUser: user })
+    axios({
+      method: "post",
+      timeout: 100, // 쓰로틀링 방지
+      url: "chatroom",
+      data: {
+        UserId: user.id,
+      },
+    })
+  }
 
   async componentDidMount() {
     try {
@@ -38,13 +40,10 @@ class Chatroom extends Component {
         .then((data) => {
           console.log(data)
           this.setState({
-            msg: data.allChat.map((model) => {
-              const { username, avatar } = model.User
-              return { username, text: model.text, avatar }
-            }),
             userList: data.allUser,
           })
         })
+
       fetch("currentUser")
         .then((res) => res.json())
         .then((user) => this.setState({ user }))
@@ -61,10 +60,7 @@ class Chatroom extends Component {
 
     return (
       <ChatroomPresenter
-        greetingNotice={greetingNotice}
-        messages={msg}
         usernames={username}
-        socket={socket}
         newMessage={newMessage}
         user={user}
         userList={userList}

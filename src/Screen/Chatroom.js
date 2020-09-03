@@ -7,7 +7,6 @@ import axios from "axios"
 import io from "socket.io-client"
 import MsgBox from "../Components/MsgBox"
 import MyMsgBox from "../Components/MyMsgBox"
-import { cleanup } from "@testing-library/react"
 
 const Container = styled.section`
   width: 100vw;
@@ -115,27 +114,45 @@ const ChatRoomLink = styled(Link)`
 `
 
 const Chatroom = (props) => {
-  const [username, setUsername] = useState()
+  console.log(props)
   const [flash, setFlash] = useState()
   const [message, setMessage] = useState([])
   const [socket, setSocket] = useState()
-  const sentMessage = useRef([]) // 원래 let으로함 훅은 뭐가다른가
-  const newMessage = useRef([])
   const [loggedUser, setLoggedUser] = useState()
   const [userList, setUserList] = useState()
-  const [targetUser, setTargetUser] = useState()
+  const targetUser = useRef()
   const [submit, setSubmit] = useState(0)
-  const enterRoom = (user) => {
-    setTargetUser(user)
-
-    axios({
+  const enterRoom = async (user) => {
+    console.log(user)
+    console.log(targetUser)
+    targetUser.current = user
+    const { data: chatroom } = await axios({
       method: "post",
-      timeout: 100, // 쓰로틀링 방지
+      timeout: 500, // 쓰로틀링 방지
       url: "chatroom",
       data: {
         UserId: user.id,
       },
     })
+
+    getOriginMsg(user)
+  }
+
+  const getOriginMsg = async (user) => {
+    const originMessage = await axios({
+      method: "post",
+      url: "find-chat",
+      data: {
+        targetUser: user,
+      },
+    })
+    console.log(user)
+    setMessage(
+      originMessage.data.map((msg) => {
+        return { text: msg.text, username: msg.User.username }
+      })
+    )
+    setSubmit((submit) => submit + 1)
   }
 
   const handleSubmit = (e) => {
@@ -145,7 +162,7 @@ const Chatroom = (props) => {
 
     const { username } = loggedUser
     console.log(loggedUser)
-    console.log(targetUser)
+    console.log(targetUser.current)
     socket.emit("sendMsg", { username, text: message.value })
     axios({
       method: "post",
@@ -153,13 +170,12 @@ const Chatroom = (props) => {
       timeout: 1000, // 쓰로틀링 방지
       data: {
         content: message.value,
-        targetID: targetUser.id,
+        targetID: targetUser.current.id,
       },
     })
 
-    newMessage.current.push({ username, text: message.value })
-    setSubmit(submit + 1)
-    console.log(newMessage.current)
+    // newMessage.current.push({ username, text: message.value })
+
     message.value = ""
   }
 
@@ -171,22 +187,22 @@ const Chatroom = (props) => {
         setFlash(msg)
       })
       socket.on("sendMsg", (msg) => {
-        console.log(msg)
-        newMessage.current.push({ username: msg.username, text: msg.text })
-        setSubmit((submit) => submit + 1)
-        console.log(submit)
+        getOriginMsg(targetUser.current)
+
+        console.log("sendMsg socket is activated!!")
       }) // 메세지 받기 , recieving message
       fetch("chat")
         .then((res) => res.json())
         .then((data) => {
-          setMessage(
-            data.allChat.map((model) => {
-              const { username, avatar } = model.User
-              return { username, text: model.text, avatar }
-            })
-          )
+          // setMessage(
+          //   data.allChat.map((model) => {
+          //     const { username, avatar } = model.User
+          //     return { username, text: model.text, avatar }
+          //   })
+          // )
           setUserList(data.allUser)
         })
+
       fetch("currentUser")
         .then((res) => res.json())
         .then((user) => setLoggedUser(user))
@@ -196,7 +212,7 @@ const Chatroom = (props) => {
     return () => {
       console.log("cleaned up")
     }
-  }, [newMessage])
+  }, [])
 
   return (
     <Container>
@@ -218,7 +234,10 @@ const Chatroom = (props) => {
                         <ChatRoomLink
                           key={index}
                           onClick={() => enterRoom(user)}
-                          to={`/chatroom/${user.id}`}
+                          to={{
+                            pathname: `/chatroom/${user.id}`,
+                            targetUser: user,
+                          }}
                         >
                           {user.username}({user.status === "active" ? "온라인" : "오프라인"})
                         </ChatRoomLink>
@@ -235,21 +254,15 @@ const Chatroom = (props) => {
             <ChatBox>
               <GreetingNotice>{flash}</GreetingNotice>
               <ChatScreen id="chatScreen">
-                {message.map((message, index) =>
-                  loggedUser && message.username === loggedUser.username ? (
-                    <MyMsgBox key={index} msg={message.text} username={message.username} />
-                  ) : (
-                    <MsgBox key={index} msg={message.text} username={message.username} />
-                  )
-                )}
-
-                {newMessage.current.map((message, index) =>
-                  loggedUser && message.username === loggedUser.username ? (
-                    <MyMsgBox key={index} msg={message.text} username={message.username} />
-                  ) : (
-                    <MsgBox key={index} msg={message.text} username={message.username} />
-                  )
-                )}
+                {message
+                  ? message.map((message, index) =>
+                      loggedUser && message.username === loggedUser.username ? (
+                        <MyMsgBox key={index} msg={message.text} username={message.username} />
+                      ) : (
+                        <MsgBox key={index} msg={message.text} username={message.username} />
+                      )
+                    )
+                  : null}
               </ChatScreen>
               <ChatForm onSubmit={handleSubmit} action="chat" method="post">
                 <ChatText id="text" type="text" name="content" required={true} />
