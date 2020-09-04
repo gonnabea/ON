@@ -30,6 +30,8 @@ export const postChat = async (req, res) => {
   } catch (err) {
     console.log(err)
   }
+
+  return ""
 }
 
 export const chatroom = async (req, res) => {
@@ -82,8 +84,6 @@ export const findMsg = async (req, res) => {
       ],
     },
   })
-
-  console.log(messages)
 
   res.send(messages)
 }

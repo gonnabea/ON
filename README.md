@@ -8,9 +8,8 @@
 
 - [x] MySQL 💎
 - [x] Express.js
-- [x] React.js
+- [x] React.js (Styled-Components, Hooks)
 - [x] Node.js
-- [x] Styled-Components
 - [x] Socket.io
 
 - 본 프로젝트의 **주 목적은 SQL, webSocket에 대한 학습**이며, Express.js + React.js의 조합에 익숙해지기 위해 구상한 사이드 프로젝트입니다.

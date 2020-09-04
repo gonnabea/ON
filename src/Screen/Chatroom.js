@@ -122,6 +122,7 @@ const Chatroom = (props) => {
   const [userList, setUserList] = useState()
   const targetUser = useRef()
   const [submit, setSubmit] = useState(0)
+  const screenRef = useRef()
   const enterRoom = async (user) => {
     console.log(user)
     console.log(targetUser)
@@ -152,6 +153,10 @@ const Chatroom = (props) => {
         return { text: msg.text, username: msg.User.username }
       })
     )
+    screenRef.current.scrollTo({
+      top: screenRef.current.scrollHeight + 100,
+      behavior: "smooth",
+    })
     setSubmit((submit) => submit + 1)
   }
 
@@ -167,7 +172,7 @@ const Chatroom = (props) => {
     axios({
       method: "post",
       url: `chat`,
-      timeout: 1000, // 쓰로틀링 방지
+      timeout: 4000, // 쓰로틀링 방지
       data: {
         content: message.value,
         targetID: targetUser.current.id,
@@ -253,7 +258,7 @@ const Chatroom = (props) => {
           <Inside>
             <ChatBox>
               <GreetingNotice>{flash}</GreetingNotice>
-              <ChatScreen id="chatScreen">
+              <ChatScreen id="chatScreen" ref={screenRef}>
                 {message
                   ? message.map((message, index) =>
                       loggedUser && message.username === loggedUser.username ? (
