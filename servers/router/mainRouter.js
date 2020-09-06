@@ -1,6 +1,6 @@
 import express, { Router } from "express"
 import routes from "../routes"
-import { chatController, postChat, chatroom, findMsg } from "../controller/mainController"
+import { chatController, postChat, chatroom, findMsg } from "../controller/chatController"
 
 const router = express.Router()
 

@@ -4,10 +4,16 @@ import routes from "../routes"
 import { Model } from "sequelize"
 
 export const postLogin = passport.authenticate("local", {
-  successRedirect: "back",
+  successRedirect: "/success-login",
   failureRedirect: "/loginfailed",
   failureFlash: true,
 }) // err 패러미터를 만들어주지 않았기 때문에 passport.js에 있는 코드에 err argument가 없었던 것이다.
+
+export const successLogin = async (req, res) => {
+  req.user.status = "active"
+  await req.user.save()
+  res.redirect("http://localhost:3000/#/")
+}
 
 export const userController = async (req, res) => {
   // db.Chat.findAll().then(chats => res.json({chats}))
@@ -38,6 +44,20 @@ export const postJoin = async (req, res) => {
 }
 
 export const logout = async (req, res) => {
+  req.user.status = "inactive"
+  await req.user.save()
   req.logout()
   res.redirect("back")
 }
+
+// export const addFriend = (req, res) => {
+//   const {
+//     body: { targetUser },
+//   } = req
+
+//   const loggedUser = db.User.findOne({
+//     where: { id: req.user.id },
+//   })
+
+//   const Friends = db.User.findAll()
+// }

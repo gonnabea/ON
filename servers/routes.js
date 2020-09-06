@@ -6,6 +6,8 @@ const LOGIN = "/login"
 const LOGOUT = "/logout"
 const JOIN = "/join"
 const FINDCHAT = "/find-chat"
+const ADDFRIEND = "/add-friend"
+const SUCCESSLOGIN = "/success-login"
 
 const routes = {
   home: HOME,
@@ -16,6 +18,8 @@ const routes = {
   logout: LOGOUT,
   join: JOIN,
   findChat: FINDCHAT,
+  addFriend: ADDFRIEND,
+  successLogin: SUCCESSLOGIN,
 }
 
 export default routes
