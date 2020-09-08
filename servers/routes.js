@@ -8,6 +8,8 @@ const JOIN = "/join"
 const FINDCHAT = "/find-chat"
 const ADDFRIEND = "/add-friend"
 const SUCCESSLOGIN = "/success-login"
+const SETTING = "/setting"
+const SETSTATUSMSG = "/setStatusMsg"
 
 const routes = {
   home: HOME,
@@ -20,6 +22,8 @@ const routes = {
   findChat: FINDCHAT,
   addFriend: ADDFRIEND,
   successLogin: SUCCESSLOGIN,
+  setting: SETTING,
+  setStatusMsg: SETSTATUSMSG,
 }
 
 export default routes

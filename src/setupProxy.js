@@ -37,6 +37,14 @@ module.exports = function (app) {
     createProxyMiddleware("/success-login", {
       target: "http://localhost:3001/",
       changeOrigin: true,
+    }),
+    createProxyMiddleware("/setting", {
+      target: "http://localhost:3001/",
+      changeOrigin: true,
+    }),
+    createProxyMiddleware("/setStatusMsg", {
+      target: "http://localhost:3001/",
+      changeOrigin: true,
     })
   )
 }

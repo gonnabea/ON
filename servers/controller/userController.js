@@ -50,6 +50,19 @@ export const logout = async (req, res) => {
   res.redirect("back")
 }
 
+export const setting = async (req, res) => {
+  console.log(`${req.user.username}: You're now in Setting`)
+}
+
+export const setStatusMsg = async (req, res) => {
+  const {
+    body: { text },
+  } = req
+  req.user.statusMsg = text
+  await req.user.save()
+  console.log(req.user.statusMsg)
+}
+
 // export const addFriend = (req, res) => {
 //   const {
 //     body: { targetUser },

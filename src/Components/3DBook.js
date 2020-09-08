@@ -13,15 +13,16 @@ from {
 
 const Container = styled.section`
   transform-style: preserve-3d;
+  transform-origin: left;
   position: relative;
   color: white;
   /* animation: rotate 3s forwards; */
   width: ${(props) => (props.width ? props.width : "!00px")};
   height: ${(props) => (props.height ? props.height : "150px")};
-
+  animation: ${(props) => (props.backState ? "rotate" : null)} 0.7s forwards linear;
   @keyframes rotate {
     to {
-      transform: rotateY(360deg);
+      transform: rotateY(180deg);
     }
   }
 `
@@ -36,14 +37,6 @@ const Front = styled.div`
     forwards linear;
   transform-origin: top left;
   transform: ${(props) => (props.initState === "open" ? "rotateY(-180deg)" : null)};
-  @keyframes openBook {
-    from {
-      transform: rotateY(0deg);
-    }
-    to {
-      transform: rotateY(-150deg);
-    }
-  }
 `
 
 const Back = styled.div`
@@ -145,9 +138,16 @@ const Book = ({
   spine,
   state,
   initState,
+  backState,
 }) => {
   return (
-    <Container width={width} height={height} state={state}>
+    <Container
+      width={width}
+      height={height}
+      state={state}
+      initState={initState}
+      backState={backState}
+    >
       <Front
         width={width}
         height={height}

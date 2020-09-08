@@ -129,7 +129,7 @@ const Chatroom = (props) => {
     targetUser.current = user
     const { data: chatroom } = await axios({
       method: "post",
-      timeout: 500, // 쓰로틀링 방지
+      timeout: 5000, // 쓰로틀링 방지
       url: "chatroom",
       data: {
         UserId: user.id,
@@ -172,7 +172,7 @@ const Chatroom = (props) => {
     axios({
       method: "post",
       url: `chat`,
-      timeout: 4000, // 쓰로틀링 방지
+      timeout: 5000, // 쓰로틀링 방지
       data: {
         content: message.value,
         targetID: targetUser.current.id,
@@ -235,6 +235,8 @@ const Chatroom = (props) => {
               <UserList>
                 {userList
                   ? userList.map((user, index) => {
+                      console.log(user, loggedUser)
+
                       return (
                         <ChatRoomLink
                           key={index}
@@ -244,7 +246,8 @@ const Chatroom = (props) => {
                             targetUser: user,
                           }}
                         >
-                          {user.username}({user.status === "active" ? "온라인" : "오프라인"})
+                          {user.username}({user.status === "active" ? "온라인" : "오프라인"}) :{" "}
+                          {user.statusMsg}
                         </ChatRoomLink>
                       )
                     })

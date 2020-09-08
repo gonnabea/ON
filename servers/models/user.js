@@ -1,3 +1,5 @@
+const { stringify } = require("uuid")
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define("User", {
     id: {
@@ -28,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
     status: {
       type: DataTypes.ENUM("active", "inactive"),
       defaultValue: "inactive",
+    },
+    statusMsg: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   })
   User.associate = (models) => {

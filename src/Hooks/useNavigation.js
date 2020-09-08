@@ -39,6 +39,7 @@ const Navigation = () => {
       <Header>
         <SLink to="/">홈으로</SLink>
         <SLink to="/chatroom">채팅</SLink>
+        <SLink to="/setting">설정</SLink>
         <a href="http://localhost:3001/logout" style={{ color: "white" }}>
           Logout
         </a>
