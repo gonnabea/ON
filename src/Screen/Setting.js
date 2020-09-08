@@ -128,7 +128,6 @@ const Chatroom = (props) => {
   const statusMsg = useRef()
 
   const setStatusMsg = (e) => {
-    console.log(e, statusMsg.current)
     e.preventDefault()
     axios({
       method: "post",
@@ -137,6 +136,7 @@ const Chatroom = (props) => {
         text: statusMsg.current.value,
       },
     })
+    statusMsg.current.value = ""
   }
 
   useEffect(() => {

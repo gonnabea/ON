@@ -13,7 +13,7 @@ from {
 
 const Container = styled.section`
   transform-style: preserve-3d;
-  transform-origin: left;
+  transform-origin: center;
   position: relative;
   color: white;
   /* animation: rotate 3s forwards; */
