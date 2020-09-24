@@ -22,7 +22,7 @@ class Home extends Component {
 
   render() {
     const { user, loading } = this.state
-    console.log(this.state.homeData)
+    console.log(this)
     return <HomePresenter user={user} loading={loading} />
   }
 }

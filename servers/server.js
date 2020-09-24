@@ -15,6 +15,7 @@ import passport from "passport"
 import dotenv from "dotenv"
 import "./passport"
 import flash from "connect-flash"
+import localsMiddlewares from "./middleware"
 
 const PORT = process.env.PORT || 3001 // dotenv 쓰면 프록시가 망가짐
 const app = express()
@@ -126,6 +127,7 @@ app.use(passport.session())
 app.use(morgan("dev"))
 app.use(flash())
 app.use("/currentUser", (req, res) => res.json(req.user ? req.user : null))
+app.use(localsMiddlewares)
 app.use(mainRouter)
 app.use(userRouter)
 

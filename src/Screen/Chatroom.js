@@ -117,19 +117,21 @@ const Chatroom = (props) => {
   console.log(props)
   const [flash, setFlash] = useState()
   const [message, setMessage] = useState([])
-  const [socket, setSocket] = useState()
   const [loggedUser, setLoggedUser] = useState()
   const [userList, setUserList] = useState()
   const targetUser = useRef()
   const [submit, setSubmit] = useState(0)
   const screenRef = useRef()
+
+  const socket = io.connect("http://localhost:3001/")
+
   const enterRoom = async (user) => {
     console.log(user)
     console.log(targetUser)
     targetUser.current = user
     const { data: chatroom } = await axios({
       method: "post",
-      timeout: 5000, // 쓰로틀링 방지
+
       url: "chatroom",
       data: {
         UserId: user.id,
@@ -146,39 +148,37 @@ const Chatroom = (props) => {
       data: {
         targetUser: user,
       },
-    })
-    console.log(user)
+    }) // 백엔드로 타겟 유저와의 채팅을 요청
+
     setMessage(
       originMessage.data.map((msg) => {
         return { text: msg.text, username: msg.User.username }
       })
-    )
-    screenRef.current.scrollTo({
-      top: screenRef.current.scrollHeight + 100,
-      behavior: "smooth",
-    })
-    setSubmit((submit) => submit + 1)
+    ) // 메세지들을 업데이트함
+    screenRef.current &&
+      screenRef.current.scrollTo({
+        top: screenRef.current.scrollHeight + 100,
+        behavior: "smooth",
+      })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     const message = document.getElementById("text")
 
     const { username } = loggedUser
-    console.log(loggedUser)
-    console.log(targetUser.current)
-    socket.emit("sendMsg", { username, text: message.value })
+
     axios({
       method: "post",
       url: `chat`,
-      timeout: 5000, // 쓰로틀링 방지
+
       data: {
         content: message.value,
         targetID: targetUser.current.id,
       },
     })
-
+    socket.emit("sendMsg", { username, text: message.value })
     // newMessage.current.push({ username, text: message.value })
 
     message.value = ""
@@ -186,31 +186,27 @@ const Chatroom = (props) => {
 
   useEffect(() => {
     try {
-      const socket = io.connect("http://localhost:3001/")
-      setSocket(socket)
       socket.on("welcome", (msg) => {
         setFlash(msg)
       })
-      socket.on("sendMsg", (msg) => {
-        getOriginMsg(targetUser.current)
 
-        console.log("sendMsg socket is activated!!")
-      }) // 메세지 받기 , recieving message
       fetch("chat")
         .then((res) => res.json())
         .then((data) => {
-          // setMessage(
-          //   data.allChat.map((model) => {
-          //     const { username, avatar } = model.User
-          //     return { username, text: model.text, avatar }
-          //   })
-          // )
           setUserList(data.allUser)
         })
 
       fetch("currentUser")
         .then((res) => res.json())
         .then((user) => setLoggedUser(user))
+
+      socket.on("sendMsg", (msg) => {
+        // 메세지를 받았을 때
+        console.log(msg)
+        getOriginMsg(targetUser.current)
+
+        console.log("sendMsg socket is activated!!")
+      }) // 메세지 받기 , recieving message
     } catch (err) {
       console.log(err)
     }
@@ -265,12 +261,13 @@ const Chatroom = (props) => {
                 {message
                   ? message.map((message, index) =>
                       loggedUser && message.username === loggedUser.username ? (
-                        <MyMsgBox key={index} msg={message.text} username={message.username} />
+                        <MyMsgBox key={index} msg={message.text} username={message.username} /> // 내가 보낸 메세지
                       ) : (
-                        <MsgBox key={index} msg={message.text} username={message.username} />
+                        <MsgBox key={index} msg={message.text} username={message.username} /> // 받은 메세지
                       )
                     )
                   : null}
+                {/* 메세지를 받을 때마다 모든 메세지를 다시 로드하는 비효율적인 구조. */}
               </ChatScreen>
               <ChatForm onSubmit={handleSubmit} action="chat" method="post">
                 <ChatText id="text" type="text" name="content" required={true} />

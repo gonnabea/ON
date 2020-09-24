@@ -1,6 +1,5 @@
 import React from "react"
 import styled from "styled-components"
-import Cube from "../Components/3D-Cube"
 import Book from "../Components/3DBook"
 import Navigation from "../Hooks/useNavigation"
 
@@ -30,9 +29,6 @@ const BookFront = styled.div`
 `
 
 const Intro = styled.main``
-
-const BookBack = styled.div``
-const BookSpine = styled.div``
 
 export default ({ user, loading }) => (
   <Container>
