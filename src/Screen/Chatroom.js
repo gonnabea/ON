@@ -26,7 +26,6 @@ const FrontContainer = styled.section`
 `
 
 const ChatBox = styled.div`
-  background-color: #f5f9fd;
   width: 100%;
   height: 100%;
   color: #363883;
@@ -70,6 +69,7 @@ const ChatText = styled.input`
   border-radius: 5px;
   border: none;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  padding-right: 30%;
 `
 
 const ChatSubmit = styled.input`
@@ -77,7 +77,7 @@ const ChatSubmit = styled.input`
   left: 75%;
   bottom: 80%;
   width: 20%;
-  background-color: #363883;
+  background-color: #f23f79;
   color: white;
   border: none;
   outline: none;
@@ -88,7 +88,7 @@ const ChatSubmit = styled.input`
 const BookFront = styled.div`
   width: 100%;
   height: 100%;
-  background-color: #314458;
+  background-color: #8a81fd;
   box-shadow: 0 0 10px white;
   display: flex;
   flex-direction: column;
@@ -98,7 +98,7 @@ const BookFront = styled.div`
 const Inside = styled.div`
   width: 100%;
   height: 100%;
-  background-color: #314458;
+  background-color: white;
   box-shadow: 0 0 10px white;
   display: flex;
 `
@@ -110,7 +110,26 @@ const UserList = styled.ul`
 
 const ChatRoomLink = styled(Link)`
   color: white;
-  background-color: grey;
+  background-color: #f23f79;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  border: solid 2px black;
+`
+
+const UserInfo = styled.span`
+  display: flex;
+  flex-direction: column;
+`
+
+const Username = styled.span`
+  margin-bottom: 20px;
+  font-size: 20px;
+`
+
+const StatusMsg = styled.span`
+  font-size: 15px;
+  opacity: 0.8;
 `
 
 const Chatroom = (props) => {
@@ -222,35 +241,35 @@ const Chatroom = (props) => {
         height="500px"
         spineWidth="50px"
         state={true}
-        initState={"open"}
         front={
           <BookFront>
-            <span>
-              <Navigation />
+            <Navigation />
 
-              <UserList>
-                {userList
-                  ? userList.map((user, index) => {
-                      console.log(user, loggedUser)
+            <UserList>
+              {userList
+                ? userList.map((user, index) => {
+                    console.log(user, loggedUser)
 
-                      return (
-                        <ChatRoomLink
-                          key={index}
-                          onClick={() => enterRoom(user)}
-                          to={{
-                            pathname: `/chatroom/${user.id}`,
-                            targetUser: user,
-                          }}
-                        >
-                          {user.username}({user.status === "active" ? "온라인" : "오프라인"}) :{" "}
-                          {user.statusMsg}
-                        </ChatRoomLink>
-                      )
-                    })
-                  : null}
-              </UserList>
-            </span>
-            <UserList></UserList>
+                    return (
+                      <ChatRoomLink
+                        key={index}
+                        onClick={() => enterRoom(user)}
+                        to={{
+                          pathname: `/chatroom/${user.id}`,
+                          targetUser: user,
+                        }}
+                      >
+                        <UserInfo>
+                          <Username>
+                            {user.username}({user.status === "active" ? "온라인" : "오프라인"}){" "}
+                          </Username>
+                          <StatusMsg>{user.statusMsg}</StatusMsg>
+                        </UserInfo>
+                      </ChatRoomLink>
+                    )
+                  })
+                : null}
+            </UserList>
           </BookFront>
         }
         inside1={

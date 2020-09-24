@@ -15,7 +15,6 @@ const Submit = styled.input``
 const Header = styled.div`
   width: 100%;
   height: 50px;
-  background-color: rgba(0, 0, 0, 0.5);
 `
 
 const SLink = styled(Link)`
@@ -49,7 +48,7 @@ const Navigation = () => {
     <Container>
       <Header>
         <SLink to="/">홈으로</SLink>
-        <SLink to="/chatroom">채팅</SLink>
+        <SLink to="/chatroom/lobby">채팅</SLink>
       </Header>
       <Form action="http://localhost:3001/login" method="post">
         <Input type="text" name="username" placeholder="username" required={true} />

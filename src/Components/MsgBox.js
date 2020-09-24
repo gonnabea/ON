@@ -6,6 +6,7 @@ const Container = styled.section`
   max-width: 200px;
   border-radius: 10px;
   box-shadow: 0 0 10px #548dcb;
+  margin-bottom: 5px;
 `
 
 const Username = styled.span``

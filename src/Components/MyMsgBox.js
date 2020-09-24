@@ -2,13 +2,14 @@ import React from "react"
 import styled from "styled-components"
 
 const Container = styled.section`
-  background-color: #548dcb;
+  background-color: #8a81fd;
   max-width: 200px;
-  border-radius: 10px;
+
   box-shadow: 0 0 10px #548dcb;
   align-self: flex-end;
   position: relative;
   right: 0;
+  margin-bottom: 5px;
 `
 
 const Username = styled.span``
