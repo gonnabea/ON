@@ -16,7 +16,6 @@ class Chatroom extends Component {
   }
 
   enterRoom = async (user) => {
-    console.log(user)
     this.setState({ targetUser: user })
     axios({
       method: "post",
@@ -55,7 +54,7 @@ class Chatroom extends Component {
   }
 
   render() {
-    const { greetingNotice, msg, username, socket, newMessage, user, userList } = this.state
+    const { username, newMessage, user, userList } = this.state
     console.log(userList)
 
     return (

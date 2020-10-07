@@ -15,6 +15,8 @@ const Submit = styled.input``
 const Header = styled.div`
   width: 100%;
   height: 50px;
+  display: flex;
+  align-items: center;
 `
 
 const SLink = styled(Link)`

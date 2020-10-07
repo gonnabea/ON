@@ -1,5 +1,5 @@
 const localsMiddlewares = (req, res, next) => {
-  res.locals.user = req.user
+  res.locals.currentUser = req.user
   next()
 }
 

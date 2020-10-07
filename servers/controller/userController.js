@@ -60,7 +60,6 @@ export const setStatusMsg = async (req, res) => {
   } = req
   req.user.statusMsg = text
   await req.user.save()
-  console.log(req.user.statusMsg)
 }
 
 // export const addFriend = (req, res) => {

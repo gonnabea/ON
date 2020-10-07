@@ -133,20 +133,15 @@ const StatusMsg = styled.span`
 `
 
 const Chatroom = (props) => {
-  console.log(props)
-  const [flash, setFlash] = useState()
   const [message, setMessage] = useState([])
   const [loggedUser, setLoggedUser] = useState()
   const [userList, setUserList] = useState()
   const targetUser = useRef()
   const [submit, setSubmit] = useState(0)
   const screenRef = useRef()
-
+  const [flash, setFlash] = useState()
   const socket = io.connect("http://localhost:3001/")
-
   const enterRoom = async (user) => {
-    console.log(user)
-    console.log(targetUser)
     targetUser.current = user
     const { data: chatroom } = await axios({
       method: "post",
@@ -158,7 +153,7 @@ const Chatroom = (props) => {
     })
 
     getOriginMsg(user)
-  }
+  } // 유저가 특정 채팅방에 들어왔을 때
 
   const getOriginMsg = async (user) => {
     const originMessage = await axios({
@@ -178,7 +173,7 @@ const Chatroom = (props) => {
       screenRef.current.scrollTo({
         top: screenRef.current.scrollHeight + 100,
         behavior: "smooth",
-      })
+      }) // 메세지를 받았을 때 자동 스크롤 내리기
   }
 
   const handleSubmit = async (e) => {
@@ -201,14 +196,16 @@ const Chatroom = (props) => {
     // newMessage.current.push({ username, text: message.value })
 
     message.value = ""
-  }
+  } // 메세지 보냈을 때 처리
 
   useEffect(() => {
+    console.log(props)
     try {
+      socket.emit("welcome", "새로운 유저 접속") // 서버에 접속 메세지 보내기
       socket.on("welcome", (msg) => {
+        console.log(msg)
         setFlash(msg)
-      })
-
+      }) // 접속 메세지 리스닝
       fetch("chat")
         .then((res) => res.json())
         .then((data) => {
@@ -221,7 +218,7 @@ const Chatroom = (props) => {
 
       socket.on("sendMsg", (msg) => {
         // 메세지를 받았을 때
-        console.log(msg)
+
         getOriginMsg(targetUser.current)
 
         console.log("sendMsg socket is activated!!")
@@ -248,8 +245,6 @@ const Chatroom = (props) => {
             <UserList>
               {userList
                 ? userList.map((user, index) => {
-                    console.log(user, loggedUser)
-
                     return (
                       <ChatRoomLink
                         key={index}
@@ -275,7 +270,7 @@ const Chatroom = (props) => {
         inside1={
           <Inside>
             <ChatBox>
-              <GreetingNotice>{flash}</GreetingNotice>
+              <GreetingNotice>{flash}</GreetingNotice> {/* 새로운 유저가 접속했을 때 */}
               <ChatScreen id="chatScreen" ref={screenRef}>
                 {message
                   ? message.map((message, index) =>

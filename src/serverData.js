@@ -1,9 +1,5 @@
 import axios from "axios"
 
-const serverData = axios.create({
-  baseURL: "api",
-})
-
-const userApi = {
-  user: () => {},
+export const api = {
+  getLoggedUser: () => axios.get("currentUser").then((result) => result.data),
 }

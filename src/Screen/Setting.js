@@ -4,6 +4,7 @@ import Navigation from "../Hooks/useNavigation"
 import Book from "../Components/3DBook"
 import { Link } from "react-router-dom"
 import axios from "axios"
+import { api, getLoggedUser } from "../serverData"
 
 const Container = styled.section`
   width: 100vw;
@@ -39,7 +40,7 @@ const Spine = styled.section`
 `
 
 const Chatroom = (props) => {
-  console.log(props)
+  console.log(api.getLoggedUser())
 
   const [loggedUser, setLoggedUser] = useState()
 
