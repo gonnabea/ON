@@ -9,6 +9,9 @@ export const socketController = (socket) => {
     socket.on(events.sendMsg, (msg) => {
       // 클라이언트에서 보낸 채팅메세지 소켓 리스닝
       socket.broadcast.emit(events.sendMsg, msg) // 송신자 제외 모든 클라이언트에게 채팅메세지 전송
+    }),
+    socket.on(events.disconnect, () => {
+      socket.disconnect(true)
     })
   )
 }

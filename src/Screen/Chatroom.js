@@ -133,17 +133,18 @@ const StatusMsg = styled.span`
 `
 
 const Chatroom = (props) => {
-  const [message, setMessage] = useState([])
+  const [messages, setMessages] = useState([])
   const [loggedUser, setLoggedUser] = useState()
   const [userList, setUserList] = useState()
   const targetUser = useRef()
   const [submit, setSubmit] = useState(0)
   const screenRef = useRef()
   const [flash, setFlash] = useState()
-  const socket = io.connect("http://localhost:3001/")
+  const [socket, setSocket] = useState(io.connect("http://localhost:3001/"))
   const enterRoom = async (user) => {
+    console.log(socket)
     targetUser.current = user
-    const { data: chatroom } = await axios({
+    await axios({
       method: "post",
 
       url: "chatroom",
@@ -151,6 +152,17 @@ const Chatroom = (props) => {
         UserId: user.id,
       },
     })
+
+    socket.emit("welcome", `${loggedUser ? loggedUser.username : "새로운 유저"} 접속`) // 서버에 접속 메세지 보내기
+    socket.on("welcome", (msg) => {
+      console.log("본인빼고 적용되어야 함" + msg)
+      setFlash(msg)
+    }) // 타 클라이언트 접속 메세지 리스닝
+
+    socket.on("sendMsg", (msg) => {
+      console.log("메세지 수신 or 송신")
+      getOriginMsg(targetUser.current)
+    }) // 타 클라이언트에게 메세지 받기 , recieving message
 
     getOriginMsg(user)
   } // 유저가 특정 채팅방에 들어왔을 때
@@ -162,9 +174,9 @@ const Chatroom = (props) => {
       data: {
         targetUser: user,
       },
-    }) // 백엔드로 타겟 유저와의 채팅을 요청
+    }) // 백엔드로 타겟 유저와의 채팅기록을 요청
 
-    setMessage(
+    setMessages(
       originMessage.data.map((msg) => {
         return { text: msg.text, username: msg.User.username }
       })
@@ -186,48 +198,35 @@ const Chatroom = (props) => {
     axios({
       method: "post",
       url: `chat`,
-
       data: {
         content: message.value,
         targetID: targetUser.current.id,
       },
-    })
-    socket.emit("sendMsg", { username, text: message.value })
-    // newMessage.current.push({ username, text: message.value })
+    }) // 메세지를 백엔드 DB에 저장 요청
 
+    socket.emit("sendMsg", { username, text: message.value }) // 채팅메세지 전송 소켓
     message.value = ""
+    setTimeout(() => getOriginMsg(targetUser.current), 0) // 콜스택에 담아두어 axios 처리 후 데이터를 불러오기 위함
   } // 메세지 보냈을 때 처리
 
   useEffect(() => {
     console.log(props)
     try {
-      socket.emit("welcome", "새로운 유저 접속") // 서버에 접속 메세지 보내기
-      socket.on("welcome", (msg) => {
-        console.log(msg)
-        setFlash(msg)
-      }) // 접속 메세지 리스닝
+      fetch("currentUser")
+        .then((res) => res.json())
+        .then((user) => setLoggedUser(user))
+
       fetch("chat")
         .then((res) => res.json())
         .then((data) => {
           setUserList(data.allUser)
         })
-
-      fetch("currentUser")
-        .then((res) => res.json())
-        .then((user) => setLoggedUser(user))
-
-      socket.on("sendMsg", (msg) => {
-        // 메세지를 받았을 때
-
-        getOriginMsg(targetUser.current)
-
-        console.log("sendMsg socket is activated!!")
-      }) // 메세지 받기 , recieving message
     } catch (err) {
       console.log(err)
     }
     return () => {
       console.log("cleaned up")
+      console.log(socket)
     }
   }, [])
 
@@ -272,8 +271,8 @@ const Chatroom = (props) => {
             <ChatBox>
               <GreetingNotice>{flash}</GreetingNotice> {/* 새로운 유저가 접속했을 때 */}
               <ChatScreen id="chatScreen" ref={screenRef}>
-                {message
-                  ? message.map((message, index) =>
+                {messages
+                  ? messages.map((message, index) =>
                       loggedUser && message.username === loggedUser.username ? (
                         <MyMsgBox key={index} msg={message.text} username={message.username} /> // 내가 보낸 메세지
                       ) : (
