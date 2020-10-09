@@ -179,7 +179,19 @@ const Chatroom = (props) => {
         targetUser: user,
       },
     }) // 백엔드로 타겟 유저와의 채팅기록을 요청
+    console.log(originMessage.data.sort((a,b) => {
+      if(a.id > b.id) {
+        return 1 // 뒤로 가라 (나중에 나와라)
+      }
+      else {
+        return -1 // 앞으로 와라 (먼저 나와라)
+      }
+    })) // 오브젝트 배열 정렬: id 프로퍼티 오름차순으로 정렬 
 
+    // console.log(originMessage.data.sort((a,b) => a.id > b.id)) // 위와 같지만 더 심플 
+
+    // array.sort 메소드 참고: https://flaviocopes.com/how-to-sort-array-of-objects-by-property-javascript/
+    
     setMessages(
       originMessage.data.map((msg) => {
         return { text: msg.text, username: msg.User.username }
@@ -223,7 +235,7 @@ const Chatroom = (props) => {
       top: screenRef.current.scrollHeight,
       behavior: "smooth",
     }), 0)
-     // 메세지 보냈을 시 자동 스크롤 내리기 (★화면에 새로운 채팅 생성 후 작동해야 끝까지 내려감)
+     // 메세지 보냈을 시 자동 스크롤 내리기 (★화면에 새로운 채팅 생성 후 작동해야 끝까지 내려감: setTimeout 사용)
 
     // setTimeout(() => getOriginMsg(targetUser.current), 0) // 콜스택에 담아두어 axios 처리 후 데이터를 불러오기 위함
   } // 메세지 보냈을 때 처리
@@ -300,7 +312,7 @@ const Chatroom = (props) => {
                     )
                   : null} 
                 {newMsgs.current ? 
-              newMsgs.current.map((message, index) => // 가상으로 생성한 DOM, 소켓으로 받은 새로운 메세지들 표시
+              newMsgs.current.map((message, index) => // 메시지 송신 시 가상으로 생성한 DOM, 소켓으로 받은 새로운 메세지들 표시
               loggedUser && message.username === loggedUser.username ? ( 
                 <MyMsgBox key={index} msg={message.text} username={message.username} /> // 내가 보낸 메세지
               ) : (
@@ -309,7 +321,7 @@ const Chatroom = (props) => {
                 
                
               
-                {/* 메세지를 받을 때마다 모든 메세지를 다시 로드하는 비효율적인 구조. */}
+
               </ChatScreen>
               <ChatForm onSubmit={handleSubmit} action="chat" method="post">
                 <ChatText id="text" type="text" name="content" required={true} />
