@@ -13,8 +13,8 @@ class App extends Component {
         <GlobalStyles />
 
         <Route exact path="/" component={Home} />
-        <Route exact path="/chatroom" component={MessageRoom} />
-        <Route path="/chatroom/:id" component={MessageRoom} />
+        <Route path="/chatroom" component={MessageRoom} />
+     
         <Route path="/setting" component={Setting} />
       </div>
     )
