@@ -162,10 +162,10 @@ const Chatroom = (props) => {
       setFlash(msg)
     }) // 타 클라이언트 접속 메세지 리스닝
 
-    socket.off("sendMsg").on("sendMsg", (msg) => {
+    socket.off("sendMsg").on("sendMsg", (msg) => { // 동일 메세지 중복 전송 방지 https://dev.to/bravemaster619/how-to-prevent-multiple-socket-connections-and-events-in-react-531d
       console.log(msg)
       addNewMsg(msg)
-      // getOriginMsg(targetUser.current)
+   
     }) // 타 클라이언트에게 메세지 받기 , recieving message
 
     getOriginMsg(user)
@@ -189,7 +189,7 @@ const Chatroom = (props) => {
       screenRef.current.scrollTo({
         top: screenRef.current.scrollHeight + 100,
         behavior: "smooth",
-      }) // 메세지를 받았을 때 자동 스크롤 내리기
+      }) // 채팅창 진입 시 자동 스크롤 내리기
   }
 
   const addNewMsg = (msg) => {
@@ -213,9 +213,18 @@ const Chatroom = (props) => {
       },
     }) // 메세지를 백엔드 DB에 저장 요청
 
+    
+    
     socket.emit("sendMsg", newMessage) // 채팅메세지 전송 소켓
     addNewMsg(newMessage)
     message.value = ""
+    setTimeout(() => screenRef.current &&
+    screenRef.current.scrollTo({
+      top: screenRef.current.scrollHeight,
+      behavior: "smooth",
+    }), 0)
+     // 메세지 보냈을 시 자동 스크롤 내리기 (★화면에 새로운 채팅 생성 후 작동해야 끝까지 내려감)
+
     // setTimeout(() => getOriginMsg(targetUser.current), 0) // 콜스택에 담아두어 axios 처리 후 데이터를 불러오기 위함
   } // 메세지 보냈을 때 처리
 
@@ -253,7 +262,7 @@ const Chatroom = (props) => {
 
             <UserList>
               {userList
-                ? userList.map((user, index) => {
+                ? userList.map((user, index) => { // 존재하는 모든 유저 리스트
                     return (
                       <ChatRoomLink
                         key={index}
@@ -282,17 +291,17 @@ const Chatroom = (props) => {
               <GreetingNotice>{flash}</GreetingNotice> {/* 새로운 유저가 접속했을 때 */}
               <ChatScreen id="chatScreen" ref={screenRef}>
                 {messages
-                  ? messages.map((message, index) =>
-                      loggedUser && message.username === loggedUser.username ? (
+                  ? messages.map((message, index) => // 원래 DB에 저장되어 있었던 메세지들 표시
+                      loggedUser && message.username === loggedUser.username ? ( 
                         <MyMsgBox key={index} msg={message.text} username={message.username} /> // 내가 보낸 메세지
                       ) : (
                         <MsgBox key={index} msg={message.text} username={message.username} /> // 받은 메세지
                       )
                     )
-                  : null}
+                  : null} 
                 {newMsgs.current ? 
-              newMsgs.current.map((message, index) =>
-              loggedUser && message.username === loggedUser.username ? (
+              newMsgs.current.map((message, index) => // 가상으로 생성한 DOM, 소켓으로 받은 새로운 메세지들 표시
+              loggedUser && message.username === loggedUser.username ? ( 
                 <MyMsgBox key={index} msg={message.text} username={message.username} /> // 내가 보낸 메세지
               ) : (
                 <MsgBox key={index} msg={message.text} username={message.username} /> // 받은 메세지
