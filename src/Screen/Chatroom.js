@@ -141,8 +141,10 @@ const Chatroom = (props) => {
   const screenRef = useRef()
   const [flash, setFlash] = useState()
   const [socket, setSocket] = useState(io.connect("http://localhost:3001/"))
+  
+  const newMsgs = useRef([])
   const enterRoom = async (user) => {
-    console.log(socket)
+    newMsgs.current = []; // 방을 이동할 시 주고받았던 메세지 초기화
     targetUser.current = user
     await axios({
       method: "post",
@@ -150,6 +152,7 @@ const Chatroom = (props) => {
       url: "chatroom",
       data: {
         UserId: user.id,
+        
       },
     })
 
@@ -159,9 +162,10 @@ const Chatroom = (props) => {
       setFlash(msg)
     }) // 타 클라이언트 접속 메세지 리스닝
 
-    socket.on("sendMsg", (msg) => {
-      console.log("메세지 수신 or 송신")
-      getOriginMsg(targetUser.current)
+    socket.off("sendMsg").on("sendMsg", (msg) => {
+      console.log(msg)
+      addNewMsg(msg)
+      // getOriginMsg(targetUser.current)
     }) // 타 클라이언트에게 메세지 받기 , recieving message
 
     getOriginMsg(user)
@@ -188,12 +192,17 @@ const Chatroom = (props) => {
       }) // 메세지를 받았을 때 자동 스크롤 내리기
   }
 
+  const addNewMsg = (msg) => {
+    newMsgs.current.push(msg)
+    console.log(newMsgs.current)
+    setSubmit(submit => submit+1)
+  } // 실시간으로 주고 받은 메세지 추가 함수
+
   const handleSubmit = async (e) => {
     e.preventDefault()
-
     const message = document.getElementById("text")
-
     const { username } = loggedUser
+    const newMessage = {username, text: message.value}
 
     axios({
       method: "post",
@@ -204,9 +213,10 @@ const Chatroom = (props) => {
       },
     }) // 메세지를 백엔드 DB에 저장 요청
 
-    socket.emit("sendMsg", { username, text: message.value }) // 채팅메세지 전송 소켓
+    socket.emit("sendMsg", newMessage) // 채팅메세지 전송 소켓
+    addNewMsg(newMessage)
     message.value = ""
-    setTimeout(() => getOriginMsg(targetUser.current), 0) // 콜스택에 담아두어 axios 처리 후 데이터를 불러오기 위함
+    // setTimeout(() => getOriginMsg(targetUser.current), 0) // 콜스택에 담아두어 axios 처리 후 데이터를 불러오기 위함
   } // 메세지 보냈을 때 처리
 
   useEffect(() => {
@@ -280,6 +290,16 @@ const Chatroom = (props) => {
                       )
                     )
                   : null}
+                {newMsgs.current ? 
+              newMsgs.current.map((message, index) =>
+              loggedUser && message.username === loggedUser.username ? (
+                <MyMsgBox key={index} msg={message.text} username={message.username} /> // 내가 보낸 메세지
+              ) : (
+                <MsgBox key={index} msg={message.text} username={message.username} /> // 받은 메세지
+              )): null}
+                
+               
+              
                 {/* 메세지를 받을 때마다 모든 메세지를 다시 로드하는 비효율적인 구조. */}
               </ChatScreen>
               <ChatForm onSubmit={handleSubmit} action="chat" method="post">

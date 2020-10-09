@@ -35,8 +35,8 @@ export const postChat = async (req, res) => {
 }
 
 export const chatroom = async (req, res) => {
-  const { UserId } = req.body
-  const { id } = req.user
+  const { UserId } = req.body // 타겟 유저
+  const { id } = req.user // 접속된 유저
 
   try {
     const loggedUser = await db.User.findOne({ where: { id } })
