@@ -143,7 +143,14 @@ const Chatroom = (props) => {
   const [socket, setSocket] = useState(io.connect("http://localhost:3001/"))
   
   const newMsgs = useRef([])
-  const enterRoom = async (user) => {
+  const enterRoom = async ({user,previousUser}) => {
+  
+  
+    if(previousUser){
+      const preRoomID = loggedUser.id + previousUser.id
+      const preRoomID2 = previousUser.id + loggedUser.id
+      socket.emit("leaveRoom", {roomID:preRoomID,roomID2:preRoomID2})
+    } // 채팅방 이동 시 이전 채팅방 소켓 채널 제거
     newMsgs.current = []; // 방을 이동할 시 주고받았던 메세지 초기화
     targetUser.current = user
     await axios({
@@ -282,7 +289,7 @@ const Chatroom = (props) => {
                     return (
                       <ChatRoomLink
                         key={index}
-                        onClick={() => enterRoom(user)}
+                        onClick={() => enterRoom({user,previousUser:targetUser.current || null})}
                         to={{
                           pathname: `/chatroom/${user.id}`,
                           targetUser: user,
