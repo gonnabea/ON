@@ -156,9 +156,12 @@ const Chatroom = (props) => {
       },
     })
 
-    socket.emit("welcome", `${loggedUser ? loggedUser.username : "새로운 유저"} 접속`) // 서버에 접속 메세지 보내기
+    const roomID = loggedUser.id + targetUser.current.id
+    const roomID2 = targetUser.current.id + loggedUser.id
+
+    socket.emit("welcome", {msg: `${loggedUser ? loggedUser.username : "새로운 유저"} 접속`,roomID, roomID2 }) // 서버에 접속, 소켓 ID 전달
     socket.on("welcome", (msg) => {
-      console.log("본인빼고 적용되어야 함" + msg)
+     
       setFlash(msg)
     }) // 타 클라이언트 접속 메세지 리스닝
 
@@ -191,7 +194,7 @@ const Chatroom = (props) => {
     // console.log(originMessage.data.sort((a,b) => a.id > b.id)) // 위와 같지만 더 심플 
 
     // array.sort 메소드 참고: https://flaviocopes.com/how-to-sort-array-of-objects-by-property-javascript/
-    
+
     setMessages(
       originMessage.data.map((msg) => {
         return { text: msg.text, username: msg.User.username }
@@ -226,8 +229,9 @@ const Chatroom = (props) => {
     }) // 메세지를 백엔드 DB에 저장 요청
 
     
-    
-    socket.emit("sendMsg", newMessage) // 채팅메세지 전송 소켓
+    const roomID = loggedUser.id + targetUser.current.id
+    const roomID2 = targetUser.current.id + loggedUser.id
+    socket.emit("sendMsg", {roomID,roomID2,newMessage}) // 채팅메세지 전송 소켓
     addNewMsg(newMessage)
     message.value = ""
     setTimeout(() => screenRef.current &&

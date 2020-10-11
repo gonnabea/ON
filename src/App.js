@@ -1,9 +1,8 @@
 import React, { Component } from "react"
 import Home from "./Home"
 import { Route } from "react-router-dom"
-import Chatroom from "./Chatroom"
 import GlobalStyles from "./Components/GlobalStyles"
-import MessageRoom from "./Screen/Chatroom"
+import ChatRoom from "./Screen/Chatroom"
 import Setting from "./Screen/Setting"
 
 class App extends Component {
@@ -11,10 +10,8 @@ class App extends Component {
     return (
       <div className="App">
         <GlobalStyles />
-
         <Route exact path="/" component={Home} />
-        <Route path="/chatroom" component={MessageRoom} />
-     
+        <Route path="/chatroom" component={ChatRoom} />
         <Route path="/setting" component={Setting} />
       </div>
     )
