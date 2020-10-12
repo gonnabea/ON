@@ -54,7 +54,7 @@ const Chatroom = (props) => {
       data: {
         text: statusMsg.current.value,
       },
-    })
+    }) // 상태메세지 설정
     statusMsg.current.value = ""
   }
 

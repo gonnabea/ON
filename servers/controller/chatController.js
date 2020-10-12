@@ -1,7 +1,7 @@
 import db, { Sequelize } from "../models"
 import passport from "passport"
 import routes from "../routes"
-import { Op } from "sequelize"
+import { Op, UUIDV4 } from "sequelize"
 
 export const chatController = async (req, res) => {
   // db.Chat.findAll().then(chats => res.json({chats}))
@@ -86,4 +86,41 @@ export const findMsg = async (req, res) => {
   })
 
   res.send(messages)
+}
+
+export const groupChatRoom = async (req, res) => {
+  // 그룹 채팅방 생성
+  const {
+    body: { targetUsers, chatroomID },
+  } = req // 생성자를 제외한 채팅방의 구성인원
+  try {
+    const chatroom = db.chatroom
+      .findOrCreate({
+        where: { id: chatroomID }, // 랜덤 ID로 룸 생성
+        defaults: {
+          id: UUIDV4,
+          users: targetUsers.push(req.user.id),
+        },
+        include: [
+          {
+            model: db.chat,
+          },
+          {
+            model: db.user,
+          },
+        ],
+      })
+      .then((result) => {
+        const created = result[1]
+
+        if (created) {
+          result.map((user, index) => {
+            result[index].addUsers(user)
+          })
+        }
+        res.send(result)
+      })
+  } catch (error) {
+    console.log(error)
+  }
 }

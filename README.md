@@ -19,7 +19,7 @@
 ## 기본 기능
 
 - [x] 로그인
-- [x] 채팅방
+- [x] Peer to Peer 채팅방
 - [x] 채팅
 - [x] 접속상태 표시
 - [x] 상태 메세지 설정
@@ -48,8 +48,11 @@
 - [x] ~~origin 메세지 시간순으로 정렬하기 (필수)~~
 - [x] ~~메세지가 글로벌 소켓으로 전송되는 문제 (필수)~~
 - [ ] 모든 api 정리하기
+- [ ] axios로 인해 약간의 딜레이 생기는 듯
 
 #### 참고할 자료
 
 -소켓 룸 생성
 https://gist.github.com/crtr0/2896891
+-MySQL 데이터 수정
+https://stackoverflow.com/questions/8158244/how-to-update-a-record-using-sequelize-for-node

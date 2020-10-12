@@ -2,12 +2,21 @@ import React from "react"
 import styled, { keyframes } from "styled-components"
 import PropTypes from "prop-types"
 
-const openBook = () => keyframes`
+const openCover = () => keyframes`
 from {
       transform: rotateY(0deg);
     }
     to {
-      transform: rotateY(-180deg);
+      transform: rotateY(-180deg) ;
+    }
+`
+
+const openBook = () => keyframes`
+from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-100px);
     }
 `
 
@@ -20,6 +29,7 @@ const Container = styled.section`
   width: ${(props) => (props.width ? props.width : "!00px")};
   height: ${(props) => (props.height ? props.height : "150px")};
   animation: ${(props) => (props.backState ? "rotate" : null)} 0.7s forwards linear;
+
   @keyframes rotate {
     to {
       transform: rotateY(180deg);
@@ -33,7 +43,7 @@ const Front = styled.div`
   height: ${(props) => (props.height ? props.height : "150px")};
   background-color: black;
   color: white;
-  animation: ${(props) => (props.state && props.initState !== "open" ? openBook : null)} 0.5s
+  animation: ${(props) => (props.state && props.initState !== "open" ? openCover : null)} 0.5s
     forwards linear;
   transform-origin: top left;
   transform: ${(props) => (props.initState === "open" ? "rotateY(-180deg)" : null)};

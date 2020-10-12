@@ -33,8 +33,8 @@ const Intro = styled.main``
 export default ({ user, loading }) => (
   <Container>
     <Book
-      width="350px"
-      height="500px"
+      width="500px"
+      height="600px"
       spineWidth="50px"
       front={
         <BookFront>
