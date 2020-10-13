@@ -100,14 +100,14 @@ export const groupChatRoom = async (req, res) => {
         defaults: {
           id: UUIDV4,
           users: targetUsers.push(req.user.id),
-        },
+        }, // 새로 생성할 때 디폴트 값
         include: [
           {
             model: db.chat,
           },
           {
             model: db.user,
-          },
+          }, // 채팅방에 메세지와 유저 정보 표시
         ],
       })
       .then((result) => {

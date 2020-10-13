@@ -50,7 +50,7 @@ const ChatScreen = styled.div`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  padding: 50px 20px;
+  padding: 60px 20px;
   width: 100%;
 `
 
@@ -79,6 +79,7 @@ const ChatText = styled.input`
   border: none;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
   padding-right: 30%;
+  font-size: 18px;
 `
 
 const ChatSubmit = styled.input`
@@ -97,18 +98,34 @@ const ChatSubmit = styled.input`
 const BookFront = styled.div`
   width: 100%;
   height: 100%;
-  background-color: #8a81fd;
+  background-color: #98c0d9;
+  /* background-image: url("/cover.jpg"); */
+  background-size: cover;
+
   box-shadow: 0 0 10px white;
   display: flex;
   flex-direction: column;
   transform: scaleX(-1);
 `
 
+const FrontBgImg = styled.img`
+  z-index: -999;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  animation: hideImg 0.5s forwards;
+  @keyframes hideImg {
+    to {
+      opacity: 0;
+    }
+  }
+`
+
 const Inside = styled.div`
   width: 100%;
   height: 100%;
   background-color: white;
-  background-image: url("/paper.jpg");
+  background-image: url("/paper2.jpg");
   box-shadow: 0 0 10px white;
   display: flex;
 `
@@ -299,12 +316,13 @@ const Chatroom = (props) => {
     <Container>
       <Book
         width="500px"
-        height="600px"
+        height="650px"
         spineWidth="50px"
         state={true}
         front={
           <BookFront>
             <Navigation />
+            <FrontBgImg src="/cover.jpg" />
             <span onClick={startGroupChat}>
               <NeonLineButton width={"150px"} color={"#DBC8AB"} text={"+💬"} />
             </span>

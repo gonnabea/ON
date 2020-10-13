@@ -20,7 +20,7 @@ const BookFront = styled.div`
   width: 100%;
   height: 100%;
   /* background-color: #314458; */
-  background-image: url("https://i.pinimg.com/236x/c4/07/26/c40726cc370114c2b49c21a3eb6ec46f.jpg");
+  background-image: url("/cover.jpg");
   background-size: cover;
   box-shadow: 0 0 10px white;
   display: flex;
@@ -34,7 +34,7 @@ export default ({ user, loading }) => (
   <Container>
     <Book
       width="500px"
-      height="600px"
+      height="650px"
       spineWidth="50px"
       front={
         <BookFront>
@@ -42,7 +42,7 @@ export default ({ user, loading }) => (
             <Navigation />
             {loading === true ? "Now Loading..." : `Welcome ${user ? user.username : ""}!`}
           </Head>
-          <Intro>연결책</Intro>
+          <Intro></Intro>
         </BookFront>
       }
     />

@@ -29,7 +29,7 @@ const Container = styled.section`
   width: ${(props) => (props.width ? props.width : "!00px")};
   height: ${(props) => (props.height ? props.height : "150px")};
   animation: ${(props) => (props.backState ? "rotate" : null)} 0.7s forwards linear;
-
+  box-shadow: 20px 20px 30px black;
   @keyframes rotate {
     to {
       transform: rotateY(180deg);

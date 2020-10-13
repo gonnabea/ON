@@ -19,16 +19,18 @@ const BookFront = styled.div`
   width: 100%;
   height: 100%;
   background-color: #314458;
+  background-image: url("/cover.jpg");
+  background-size: cover;
   box-shadow: 0 0 10px white;
   display: flex;
   flex-direction: column;
-  transform: scaleX(-1);
 `
 
 const Back = styled.section`
   width: 100%;
   height: 100%;
-  background-color: pink;
+  background-image: url("/backCover.jpg");
+  background-size: 100% 100%;
   transform: scaleX(-1);
 `
 
@@ -37,6 +39,7 @@ const Spine = styled.section`
   height: 100%;
   justify-content: center;
   align-items: center;
+  background-color: #98c0d9;
 `
 
 const Chatroom = (props) => {
@@ -74,8 +77,8 @@ const Chatroom = (props) => {
   return (
     <Container>
       <Book
-        width="350px"
-        height="500px"
+        width="500px"
+        height="650px"
         spineWidth="50px"
         backState={true}
         front={
