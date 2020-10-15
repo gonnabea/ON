@@ -7,7 +7,7 @@ from {
       transform: rotateY(0deg);
     }
     to {
-      transform: rotateY(-180deg) ;
+      transform: rotateY(-150deg) ;
     }
 `
 
@@ -25,6 +25,7 @@ const Container = styled.section`
   transform-origin: center;
   position: relative;
   color: white;
+  perspective: 5000px; // 5000px 만큼 멀리서 보기 : 더 사실적인 시점 구현
   /* animation: rotate 3s forwards; */
   width: ${(props) => (props.width ? props.width : "!00px")};
   height: ${(props) => (props.height ? props.height : "150px")};

@@ -32,6 +32,7 @@ const Intro = styled.main``
 
 export default ({ user, loading }) => (
   <Container>
+    {console.log(user)}
     <Book
       width="500px"
       height="650px"
@@ -40,7 +41,7 @@ export default ({ user, loading }) => (
         <BookFront>
           <Head>
             <Navigation />
-            {loading === true ? "Now Loading..." : `Welcome ${user ? user.username : ""}!`}
+            {user ? `안녕하세요 ${user ? user.username : ""}님!` : "로그인 후 이용해주세요"}
           </Head>
           <Intro></Intro>
         </BookFront>

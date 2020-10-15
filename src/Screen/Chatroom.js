@@ -50,7 +50,7 @@ const ChatScreen = styled.div`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  padding: 60px 20px;
+  padding: 70px 20px;
   width: 100%;
 `
 
@@ -99,10 +99,11 @@ const BookFront = styled.div`
   width: 100%;
   height: 100%;
   background-color: #98c0d9;
+
   /* background-image: url("/cover.jpg"); */
   background-size: cover;
 
-  box-shadow: 0 0 10px white;
+  box-shadow: 0 0 20px black;
   display: flex;
   flex-direction: column;
   transform: scaleX(-1);
@@ -160,15 +161,15 @@ const StatusMsg = styled.span`
 `
 
 const Chatroom = (props) => {
-  const [messages, setMessages] = useState([])
-  const [loggedUser, setLoggedUser] = useState()
-  const [userList, setUserList] = useState()
-  const targetUser = useRef()
-  const [submit, setSubmit] = useState(0)
+  const [messages, setMessages] = useState([]) // DB에서 가져오는 메세지들
+  const [loggedUser, setLoggedUser] = useState() // 로그인 된 유저 정보
+  const [userList, setUserList] = useState() // 모든 유저리스트
+  const targetUser = useRef() // 지정된 유저 정보
+  const [submit, setSubmit] = useState(0) // submit시 리렌더링 위해 작동시키는 useState
   const screenRef = useRef()
-  const [flash, setFlash] = useState()
-  const [socket, setSocket] = useState(io.connect("http://localhost:3001/"))
-  const [modalDisplay, setModalDisplay] = useState("none")
+  const [flash, setFlash] = useState() // 타 유저가 접속했을 시 알림
+  const [socket, setSocket] = useState(io.connect("http://localhost:3001/")) // 클라이언트 소켓 통신
+  const [modalDisplay, setModalDisplay] = useState("none") // 그룹챗 모달 창 토글
 
   const newMsgs = useRef([])
   const enterRoom = async ({ user, previousUser }) => {
@@ -286,12 +287,12 @@ const Chatroom = (props) => {
     try {
       fetch("currentUser")
         .then((res) => res.json())
-        .then((user) => setLoggedUser(user))
+        .then((user) => setLoggedUser(user)) // 로그인 된 유저 정보 불러오기
 
       fetch("chat")
         .then((res) => res.json())
         .then((data) => {
-          setUserList(data.allUser)
+          setUserList(data.allUser) // 모든 유저리스트 불러오기
         })
     } catch (err) {
       console.log(err)
@@ -303,14 +304,12 @@ const Chatroom = (props) => {
   }, [])
 
   const startGroupChat = () => {
-    console.log("test")
     if (modalDisplay === "none") {
       setModalDisplay("block")
     } else {
       setModalDisplay("none")
     }
-    console.log(modalDisplay.current)
-  }
+  } // 그룹챗 모달 창 토글 함수
 
   return (
     <Container>

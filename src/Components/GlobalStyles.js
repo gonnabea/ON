@@ -11,7 +11,7 @@ a{
 }
 body{
 background-color: #D7D8F1;
-color:white;
+
 font-size: 20px;
 overflow: hidden;
 }
