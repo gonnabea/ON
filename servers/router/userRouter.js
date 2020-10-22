@@ -9,6 +9,7 @@ import {
   successLogin,
   setting,
   setStatusMsg,
+  getAllUsers,
 } from "../controller/userController"
 
 const router = express.Router()
@@ -25,6 +26,8 @@ router.get(routes.successLogin, successLogin)
 router.get(routes.setting, setting)
 
 router.post(routes.setStatusMsg, setStatusMsg)
+
+router.get(routes.getAllUsers, getAllUsers)
 
 // router.post(routes.addFriend, addFriend)
 

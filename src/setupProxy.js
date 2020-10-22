@@ -45,6 +45,10 @@ module.exports = function (app) {
     createProxyMiddleware("/setStatusMsg", {
       target: "http://localhost:3001/",
       changeOrigin: true,
+    }),
+    createProxyMiddleware("/getAllUsers", {
+      target: "http://localhost:3001/",
+      changeOrigin: true,
     })
   )
 }

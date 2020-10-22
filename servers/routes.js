@@ -10,6 +10,7 @@ const ADDFRIEND = "/add-friend"
 const SUCCESSLOGIN = "/success-login"
 const SETTING = "/setting"
 const SETSTATUSMSG = "/setStatusMsg"
+const GETALLUSERS = "/getAllUsers"
 
 const routes = {
   home: HOME,
@@ -24,6 +25,7 @@ const routes = {
   successLogin: SUCCESSLOGIN,
   setting: SETTING,
   setStatusMsg: SETSTATUSMSG,
+  getAllUsers: GETALLUSERS,
 }
 
 export default routes

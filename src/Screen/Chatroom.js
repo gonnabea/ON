@@ -3,12 +3,12 @@ import styled from "styled-components"
 import Navigation from "../Hooks/useNavigation"
 import Book from "../Components/3DBook"
 import { Link } from "react-router-dom"
-import axios from "axios"
 import io from "socket.io-client"
 import MsgBox from "../Components/MsgBox"
 import MyMsgBox from "../Components/MyMsgBox"
 import NeonLineButton from "../Components/NeonLineButton"
 import GroupChatModal from "../Components/GroupChatModal"
+import api from "../api"
 
 const Container = styled.section`
   width: 100vw;
@@ -180,15 +180,7 @@ const Chatroom = (props) => {
     } // 채팅방 이동 시 이전 채팅방 소켓 채널 제거
     newMsgs.current = [] // 방을 이동할 시 주고받았던 메세지 초기화
     targetUser.current = user
-    await axios({
-      method: "post",
-
-      url: "chatroom",
-      data: {
-        UserId: user.id,
-      },
-    })
-
+    api.findChatroom(user.id)
     const roomID = loggedUser.id + targetUser.current.id
     const roomID2 = targetUser.current.id + loggedUser.id
 
@@ -211,13 +203,7 @@ const Chatroom = (props) => {
   } // 유저가 특정 채팅방에 들어왔을 때
 
   const getOriginMsg = async (user) => {
-    const originMessage = await axios({
-      method: "post",
-      url: "find-chat",
-      data: {
-        targetUser: user,
-      },
-    }) // 백엔드로 타겟 유저와의 채팅기록을 요청
+    const originMessage = await api.getOriginMsg(user) // 백엔드로 타겟 유저와의 채팅기록을 요청
     console.log(
       originMessage.data.sort((a, b) => {
         if (a.id > b.id) {
@@ -256,14 +242,7 @@ const Chatroom = (props) => {
     const { username } = loggedUser
     const newMessage = { username, text: message.value }
 
-    axios({
-      method: "post",
-      url: `chat`,
-      data: {
-        content: message.value,
-        targetID: targetUser.current.id,
-      },
-    }) // 메세지를 백엔드 DB에 저장 요청
+    api.sendMsg(message.value, targetUser.current.id) // 메세지를 백엔드 DB에 저장 요청
 
     const roomID = loggedUser.id + targetUser.current.id
     const roomID2 = targetUser.current.id + loggedUser.id
@@ -282,25 +261,21 @@ const Chatroom = (props) => {
     // 메세지 보냈을 시 자동 스크롤 내리기 (★화면에 새로운 채팅 생성 후 작동해야 끝까지 내려감: setTimeout 사용)
   } // 메세지 보냈을 때 처리
 
+  const handleApi = async () => {
+    const currentUser = await api.getLoggedUser() // 로그인 된 유저 정보 불러오기
+    const allUsers = await api.getAllUsers() // 모든 유저정보 불러오기
+    setLoggedUser(currentUser.data)
+    setUserList(allUsers.data)
+  }
+
   useEffect(() => {
     console.log(props)
     try {
-      fetch("currentUser")
-        .then((res) => res.json())
-        .then((user) => setLoggedUser(user)) // 로그인 된 유저 정보 불러오기
-
-      fetch("chat")
-        .then((res) => res.json())
-        .then((data) => {
-          setUserList(data.allUser) // 모든 유저리스트 불러오기
-        })
+      handleApi()
     } catch (err) {
       console.log(err)
     }
-    return () => {
-      console.log("cleaned up")
-      console.log(socket)
-    }
+    return () => {}
   }, [])
 
   const startGroupChat = () => {

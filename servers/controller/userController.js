@@ -62,6 +62,15 @@ export const setStatusMsg = async (req, res) => {
   await req.user.save()
 }
 
+export const getAllUsers = async (req, res) => {
+  const users = await db.User.findAll()
+  try {
+    res.json(users)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 // export const addFriend = (req, res) => {
 //   const {
 //     body: { targetUser },

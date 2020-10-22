@@ -3,8 +3,7 @@ import styled from "styled-components"
 import Navigation from "../Hooks/useNavigation"
 import Book from "../Components/3DBook"
 import { Link } from "react-router-dom"
-import axios from "axios"
-import { api, getLoggedUser } from "../serverData"
+import api from "../api"
 
 const Container = styled.section`
   width: 100vw;
@@ -43,29 +42,27 @@ const Spine = styled.section`
 `
 
 const Chatroom = (props) => {
-  console.log(api.getLoggedUser())
-
   const [loggedUser, setLoggedUser] = useState()
 
   const statusMsg = useRef()
 
   const setStatusMsg = (e) => {
     e.preventDefault()
-    axios({
-      method: "post",
-      url: "setStatusMsg",
-      data: {
-        text: statusMsg.current.value,
-      },
-    }) // 상태메세지 설정
+    api.setStatusMsg(statusMsg.current.value) // 상태메세지 설정
     statusMsg.current.value = ""
+  }
+
+  const getUser = async () => {
+    const user = await api.getLoggedUser()
+    console.log(user.data)
+    return user.data
   }
 
   useEffect(() => {
     try {
-      fetch("currentUser")
-        .then((res) => res.json())
-        .then((user) => setLoggedUser(user))
+      setLoggedUser(getUser())
+
+      getUser()
     } catch (err) {
       console.log(err)
     }
