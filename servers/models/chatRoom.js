@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   })
   ChatRoom.associate = (models) => {
     ChatRoom.hasMany(models.Chat)
-    ChatRoom.belongsToMany(models.User, { through: "UserChatroom" })
+    ChatRoom.belongsToMany(models.User, { through: "UserChatroom", as: "users" })
   }
   return ChatRoom
 }

@@ -1,6 +1,12 @@
 import express, { Router } from "express"
 import routes from "../routes"
-import { chatController, postChat, chatroom, findMsg } from "../controller/chatController"
+import {
+  chatController,
+  postChat,
+  chatroom,
+  findMsg,
+  createGroupChat,
+} from "../controller/chatController"
 
 const router = express.Router()
 
@@ -11,4 +17,5 @@ router.post(routes.chatroom, chatroom)
 
 router.post(routes.findChat, findMsg)
 
+router.post(routes.createGroupChat, createGroupChat)
 export default router

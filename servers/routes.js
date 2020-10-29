@@ -11,6 +11,7 @@ const SUCCESSLOGIN = "/success-login"
 const SETTING = "/setting"
 const SETSTATUSMSG = "/setStatusMsg"
 const GETALLUSERS = "/getAllUsers"
+const CREATEGROUPCHAT = "/create-groupchat"
 
 const routes = {
   home: HOME,
@@ -26,6 +27,7 @@ const routes = {
   setting: SETTING,
   setStatusMsg: SETSTATUSMSG,
   getAllUsers: GETALLUSERS,
+  createGroupChat: CREATEGROUPCHAT,
 }
 
 export default routes

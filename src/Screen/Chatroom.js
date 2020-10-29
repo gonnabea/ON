@@ -195,7 +195,7 @@ const Chatroom = (props) => {
 
     socket.off("sendMsg").on("sendMsg", (msg) => {
       // 동일 메세지 중복 전송 방지 https://dev.to/bravemaster619/how-to-prevent-multiple-socket-connections-and-events-in-react-531d
-      console.log(msg)
+
       addNewMsg(msg)
     }) // 타 클라이언트에게 메세지 받기 , recieving message
 
@@ -232,7 +232,6 @@ const Chatroom = (props) => {
 
   const addNewMsg = (msg) => {
     newMsgs.current.push(msg)
-    console.log(newMsgs.current)
     setSubmit((submit) => submit + 1)
   } // 실시간으로 주고 받은 메세지 추가 함수
 
@@ -269,7 +268,6 @@ const Chatroom = (props) => {
   }
 
   useEffect(() => {
-    console.log(props)
     try {
       handleApi()
     } catch (err) {
@@ -332,7 +330,7 @@ const Chatroom = (props) => {
         }
         inside1={
           <Inside>
-            <GroupChatModal display={modalDisplay} />
+            <GroupChatModal display={modalDisplay} friends={userList} />
             <ChatBox>
               <GreetingNotice>{flash}</GreetingNotice> {/* 새로운 유저가 접속했을 때 */}
               <ChatScreen id="chatScreen" ref={screenRef}>

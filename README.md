@@ -49,9 +49,11 @@
 - [x] ~~메세지가 글로벌 소켓으로 전송되는 문제 (필수)~~
 - [x] ~~모든 api 정리하기~~
 
-#### 참고할 자료
+#### 참고 자료
 
-- 소켓 룸 생성
+- 소켓 룸 생성 \
   https://gist.github.com/crtr0/2896891
-- MySQL 데이터 수정
+- MySQL 데이터 수정 \
   https://stackoverflow.com/questions/8158244/how-to-update-a-record-using-sequelize-for-node
+- MySQL Many-to-Many Relationship \
+  https://bezkoder.com/sequelize-associate-many-to-many/

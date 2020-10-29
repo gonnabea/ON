@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   })
   User.associate = (models) => {
-    User.belongsToMany(models.ChatRoom, { through: "UserChatroom" })
+    User.belongsToMany(models.ChatRoom, { through: "UserChatroom", as: "chatrooms" })
     User.hasMany(models.Chat)
   }
   return User

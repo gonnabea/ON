@@ -3,12 +3,10 @@ import LocalStrategy from "passport-local"
 import db from "./models"
 
 passport.serializeUser(function (user, done) {
-  console.log(`srealizing: ${user}`)
   done(null, user.id)
 })
 
 passport.deserializeUser(function (id, done) {
-  console.log(id)
   db.User.findOne({ where: { id } }).then(function (user) {
     done(null, user)
   })
@@ -17,7 +15,6 @@ passport.deserializeUser(function (id, done) {
 passport.use(
   new LocalStrategy(function (username, password, done) {
     return db.User.findOne({ where: { username } }).then(function (user) {
-      console.log(user)
       if (!user) {
         return done(null, false, { message: "Incorrect username." })
       }

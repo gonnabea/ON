@@ -21,7 +21,7 @@ const PORT = process.env.PORT || 3001 // dotenv 쓰면 프록시가 망가짐
 const app = express()
 
 dotenv.config()
-
+//////////////////////////////////////// 순수 SQL 테스트 ///////////////////////////////////////////////
 // MySQL 컨넥션 만들기
 const MySQL = mysql.createConnection({
   host: "localhost",
@@ -108,6 +108,8 @@ app.get("/deletepost/:id", (req, res) => {
     res.send("Post deleted...")
   })
 })
+
+//////////////////////////////////////// 순수 SQL 테스트 ///////////////////////////////////////////////
 
 app.use(cors())
 app.use(helmet())
