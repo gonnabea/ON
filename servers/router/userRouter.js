@@ -10,6 +10,7 @@ import {
   setting,
   setStatusMsg,
   getAllUsers,
+  getChatroomList,
 } from "../controller/userController"
 
 const router = express.Router()
@@ -28,6 +29,8 @@ router.get(routes.setting, setting)
 router.post(routes.setStatusMsg, setStatusMsg)
 
 router.get(routes.getAllUsers, getAllUsers)
+
+router.get(routes.chatroomList, getChatroomList)
 
 // router.post(routes.addFriend, addFriend)
 

@@ -46,7 +46,7 @@ export const chatroom = async (req, res) => {
         {
           model: db.User,
           as: "users",
-          attributes: ["id", "username"],
+          attributes: ["id", "username", "avatar"],
           through: {
             attributes: [],
           },
@@ -68,7 +68,7 @@ export const chatroom = async (req, res) => {
       console.log(result[0].users)
       res.send(result)
     })
-    console.log("채팅룸!!!!!!!!!!!!!", chatroom)
+    console.log(chatroom)
   } catch (err) {
     console.log(err)
   }
@@ -104,19 +104,29 @@ export const createGroupChat = async (req, res) => {
   // 그룹 채팅방 생성
   const {
     body: { targetUsers },
-  } = req // 생성자를 제외한 채팅방의 구성인원
+  } = req // 생성자를 제외한 채팅방의 구성인원들의 id값
   console.log(targetUsers)
   try {
     db.ChatRoom.create({
-      id: uuid(),
-    }).then((chatroom) => {
-      console.log(chatroom)
+      id: uuid(), // 랜덤ID 생성
+    }).then(async (chatroom) => {
       targetUsers.map(async (userId) => {
-        const user = await db.User.findOne({ where: { id: userId } })
-        chatroom.addUsers(user)
+        const user = await db.User.findOne({
+          where: { id: userId },
+          include: [
+            {
+              model: db.ChatRoom,
+              as: "chatrooms",
+              attributes: ["id", "text"],
+              through: {
+                attributes: [],
+              },
+            },
+          ],
+        })
+        chatroom.addUsers(user) // 내 생각에 이렇게 모델을 추가해주면 chatroom과 user 모두에게 리스트가 생기는 듯 하다
       }) // 체크된 유저들을 채팅방에 추가
       chatroom.addUsers(req.user) // 본인 추가
-      console.log("만들어진 채팅룸", chatroom)
     })
   } catch (error) {
     console.log(error)

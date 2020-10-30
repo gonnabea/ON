@@ -37,6 +37,7 @@ const api = {
         targetUser,
       },
     }),
+  getChatroomList: () => axios.get("chatroom-list"),
 }
 
 export default api

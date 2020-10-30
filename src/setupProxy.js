@@ -53,6 +53,10 @@ module.exports = function (app) {
     createProxyMiddleware("/create-groupchat", {
       target: "http://localhost:3001/",
       changeOrigin: true,
+    }),
+    createProxyMiddleware("/chatroom-list", {
+      target: "http://localhost:3001/",
+      changeOrigin: true,
     })
   )
 }

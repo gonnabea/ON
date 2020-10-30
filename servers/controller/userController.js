@@ -63,9 +63,44 @@ export const setStatusMsg = async (req, res) => {
 }
 
 export const getAllUsers = async (req, res) => {
-  const users = await db.User.findAll()
+  const users = await db.User.findAll({
+    include: [
+      {
+        model: db.ChatRoom,
+        as: "chatrooms",
+        attributes: ["id", "text"],
+        through: {
+          attributes: [],
+        },
+      },
+      {
+        model: db.Chat,
+      },
+    ],
+  })
   try {
     res.json(users)
+    console.log(users)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const getChatroomList = async (req, res) => {
+  try {
+    const user = await db.User.findOne({
+      where: {
+        id: req.user.id,
+      },
+      include: [
+        {
+          model: db.ChatRoom,
+          as: "chatrooms",
+        },
+      ],
+    })
+
+    res.json(user.chatrooms)
   } catch (error) {
     console.log(error)
   }

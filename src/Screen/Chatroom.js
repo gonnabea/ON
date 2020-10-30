@@ -170,7 +170,7 @@ const Chatroom = (props) => {
   const [flash, setFlash] = useState() // 타 유저가 접속했을 시 알림
   const [socket, setSocket] = useState(io.connect("http://localhost:3001/")) // 클라이언트 소켓 통신
   const [modalDisplay, setModalDisplay] = useState("none") // 그룹챗 모달 창 토글
-
+  const [chatrooms, setChatroomList] = useState() // 현재 접속유저의 채팅룸 id 리스트
   const newMsgs = useRef([])
   const enterRoom = async ({ user, previousUser }) => {
     if (previousUser) {
@@ -204,15 +204,15 @@ const Chatroom = (props) => {
 
   const getOriginMsg = async (user) => {
     const originMessage = await api.getOriginMsg(user) // 백엔드로 타겟 유저와의 채팅기록을 요청
-    console.log(
-      originMessage.data.sort((a, b) => {
-        if (a.id > b.id) {
-          return 1 // 뒤로 가라 (나중에 나와라)
-        } else {
-          return -1 // 앞으로 와라 (먼저 나와라)
-        }
-      })
-    ) // 오브젝트 배열 정렬: id 프로퍼티 오름차순으로 정렬
+
+    originMessage.data.sort((a, b) => {
+      if (a.id > b.id) {
+        return 1 // 뒤로 가라 (나중에 나와라)
+      } else {
+        return -1 // 앞으로 와라 (먼저 나와라)
+      }
+    })
+    // 오브젝트 배열 정렬: id 프로퍼티 오름차순으로 정렬
 
     // console.log(originMessage.data.sort((a,b) => a.id > b.id)) // 위와 같지만 더 심플
 
@@ -263,13 +263,17 @@ const Chatroom = (props) => {
   const handleApi = async () => {
     const currentUser = await api.getLoggedUser() // 로그인 된 유저 정보 불러오기
     const allUsers = await api.getAllUsers() // 모든 유저정보 불러오기
+    const chatroomList = await api.getChatroomList()
     setLoggedUser(currentUser.data)
     setUserList(allUsers.data)
+    setChatroomList(chatroomList.data)
+    console.log(chatroomList.data)
   }
 
   useEffect(() => {
     try {
       handleApi()
+      console.log(loggedUser)
     } catch (err) {
       console.log(err)
     }
