@@ -11,7 +11,7 @@ const api = {
         text,
       },
     }),
-  sendMsg: (content, targetID) =>
+  sendMsg: (content, targetID, currentRoomID) =>
     axios({
       method: "post",
       url: `chat`,
@@ -19,22 +19,25 @@ const api = {
       data: {
         content,
         targetID,
+        currentRoomID,
       },
     }), // 메세지를 백엔드 DB에 저장 요청
-  findChatroom: (UserId) =>
+  findChatroom: (UserId, currentRoomID) =>
     axios({
       method: "post",
       url: "chatroom",
       data: {
         UserId,
+        currentRoomID,
       },
     }),
-  getOriginMsg: (targetUser) =>
+  getOriginMsg: (targetUser, currentRoomID) =>
     axios({
       method: "post",
       url: "find-chat",
       data: {
         targetUser,
+        currentRoomID,
       },
     }),
   getChatroomList: () => axios.get("chatroom-list"),

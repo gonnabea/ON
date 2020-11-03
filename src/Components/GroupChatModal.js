@@ -35,7 +35,11 @@ const GroupChatModal = ({ friends, display = "none" }) => (
           ? friends.map((friend) => (
               <Friend>
                 <ProfileImg>{friend.profileImg ? friend.profileImg : null}</ProfileImg>
-                <Checkbox type="checkbox" name={"targetUsers"} value={friend.id} />
+                <Checkbox
+                  type="checkbox"
+                  name={"targetUsers"}
+                  value={`${friend.id}/${friend.username}`}
+                />
                 <FriendName>{friend.username}</FriendName>
               </Friend>
             ))

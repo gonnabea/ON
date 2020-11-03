@@ -1,6 +1,8 @@
 import db from "../models"
 import { Op } from "sequelize"
 import { uuid } from "uuidv4"
+import util from "util"
+import { NULL } from "mysql2/lib/constants/types"
 
 export const chatController = async (req, res) => {
   // db.Chat.findAll().then(chats => res.json({chats}))
@@ -21,10 +23,13 @@ export const chatController = async (req, res) => {
 
 export const postChat = async (req, res) => {
   try {
+    console.log("currentRoomID")
+    console.log(req.body.currentRoomID)
     await db.Chat.create({
       text: req.body.content,
       UserId: req.user.id,
-      ChatRoomId: req.user.id + req.body.targetID,
+      // ChatRoomId: req.user.id + req.body.targetID,
+      ChatRoomId: req.body.currentRoomID,
     })
   } catch (err) {
     console.log(err)
@@ -34,14 +39,14 @@ export const postChat = async (req, res) => {
 }
 
 export const chatroom = async (req, res) => {
-  const { UserId } = req.body // 타겟 유저
+  const { UserId, currentRoomID } = req.body // 타겟 유저
   const { id } = req.user // 접속된 유저
 
   try {
     const loggedUser = await db.User.findOne({ where: { id } })
     const targetUser = await db.User.findOne({ where: { id: UserId } })
     const chatroom = await db.ChatRoom.findOrCreate({
-      where: { id: loggedUser.id + targetUser.id },
+      where: { id: currentRoomID },
       include: [
         {
           model: db.User,
@@ -53,8 +58,8 @@ export const chatroom = async (req, res) => {
         },
       ],
       defaults: {
-        id: loggedUser.id + targetUser.id,
-        text: loggedUser.username + "'s chatroom for" + targetUser.username,
+        id: currentRoomID,
+        text: `A Chatting room`,
       },
     }).then((result) => {
       console.log("채팅룸 유저정보")
@@ -65,10 +70,8 @@ export const chatroom = async (req, res) => {
         result[0].addUsers(targetUser)
         result[0].addUsers(loggedUser)
       }
-      console.log(result[0].users)
       res.send(result)
     })
-    console.log(chatroom)
   } catch (err) {
     console.log(err)
   }
@@ -76,24 +79,28 @@ export const chatroom = async (req, res) => {
 
 export const findMsg = async (req, res) => {
   const {
-    body: { targetUser },
+    body: { targetUser, currentRoomID },
   } = req
-
+  console.log("테스트")
+  console.log(currentRoomID)
   const messages = await db.Chat.findAll({
     include: [
       {
         model: db.User,
       },
     ],
+    // where: {
+    //   [Op.or]: [
+    //     {
+    //       chatRoomId: req.user.id + targetUser.id,
+    //     },
+    //     {
+    //       chatRoomId: targetUser.id + req.user.id,
+    //     },
+    //   ],
+    // },
     where: {
-      [Op.or]: [
-        {
-          chatRoomId: req.user.id + targetUser.id,
-        },
-        {
-          chatRoomId: targetUser.id + req.user.id,
-        },
-      ],
+      chatRoomId: currentRoomID,
     },
   })
 
@@ -107,10 +114,20 @@ export const createGroupChat = async (req, res) => {
   } = req // 생성자를 제외한 채팅방의 구성인원들의 id값
   console.log(targetUsers)
   try {
+    let usernameArr = [req.user.username]
+    targetUsers.map(async (targetUser) => {
+      console.log(targetUser)
+      const username = targetUser.split("/")[1]
+      usernameArr.push(username)
+    })
+    console.log(usernameArr)
+    const usernameList = usernameArr.join()
     db.ChatRoom.create({
-      id: uuid(), // 랜덤ID 생성
+      id: uuid(),
+      text: usernameList, // 랜덤ID 생성
     }).then(async (chatroom) => {
-      targetUsers.map(async (userId) => {
+      targetUsers.map(async (targetUser) => {
+        const userId = targetUser.split("/")[0]
         const user = await db.User.findOne({
           where: { id: userId },
           include: [

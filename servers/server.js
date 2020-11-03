@@ -16,6 +16,7 @@ import dotenv from "dotenv"
 import "./passport"
 import flash from "connect-flash"
 import localsMiddlewares from "./middleware"
+import { getLoggedUser } from "./controller/userController"
 
 const PORT = process.env.PORT || 3001 // dotenv 쓰면 프록시가 망가짐
 const app = express()
@@ -128,7 +129,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(morgan("dev"))
 app.use(flash())
-app.use("/currentUser", (req, res) => res.json(req.user ? req.user : null)) // 현재 로그인 된 유저정보 클라이언트에 전송
+app.use("/currentUser", getLoggedUser) // 현재 로그인 된 유저정보 클라이언트에 전송
 app.use(localsMiddlewares)
 app.use(mainRouter)
 app.use(userRouter)

@@ -2,7 +2,7 @@ import db from "../models"
 import passport from "passport"
 import routes from "../routes"
 import { Model } from "sequelize"
-
+import util from "util"
 export const postLogin = passport.authenticate("local", {
   successRedirect: "/success-login",
   failureRedirect: "/loginfailed",
@@ -80,7 +80,7 @@ export const getAllUsers = async (req, res) => {
   })
   try {
     res.json(users)
-    console.log(users)
+    // console.log(util.inspect(users, { showHidden: false, depth: null }))
   } catch (error) {
     console.log(error)
   }
@@ -101,6 +101,30 @@ export const getChatroomList = async (req, res) => {
     })
 
     res.json(user.chatrooms)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const getLoggedUser = async (req, res) => {
+  try {
+    const User = await db.User.findOne({
+      where: { id: req.user.id },
+      include: [
+        {
+          model: db.ChatRoom,
+          as: "chatrooms",
+          attributes: ["id", "text"],
+          through: {
+            attributes: ["UserId"],
+          },
+        },
+        {
+          model: db.Chat,
+        },
+      ],
+    })
+    res.json(User)
   } catch (error) {
     console.log(error)
   }

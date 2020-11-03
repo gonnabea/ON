@@ -90,7 +90,7 @@ export const BookFront = styled.div`
   width: 100%;
   height: 100%;
   background-color: #98c0d9;
-
+  overflow: auto;
   /* background-image: url("/cover.jpg"); */
   background-size: cover;
 
@@ -149,4 +149,8 @@ export const Username = styled.span`
 export const StatusMsg = styled.span`
   font-size: 15px;
   opacity: 0.8;
+`
+export const ChatroomList = styled.ul`
+  display: flex;
+  flex-direction: column;
 `
