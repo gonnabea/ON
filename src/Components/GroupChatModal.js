@@ -33,7 +33,7 @@ const GroupChatModal = ({ friends, display = "none", loggedUser }) => (
       <FriendsList>
         {friends && loggedUser
           ? friends.map((friend) =>
-              loggedUser.username !== friend.username ? ( //
+              loggedUser.username !== friend.username ? ( // 본인은 목록에서 제거
                 <Friend>
                   <ProfileImg>{friend.profileImg ? friend.profileImg : null}</ProfileImg>
                   <Checkbox

@@ -11,14 +11,13 @@ const api = {
         text,
       },
     }),
-  sendMsg: (content, targetID, currentRoomID) =>
+  sendMsg: (content, currentRoomID) =>
     axios({
       method: "post",
       url: `chat`,
       timeout: 500,
       data: {
         content,
-        targetID,
         currentRoomID,
       },
     }), // 메세지를 백엔드 DB에 저장 요청
@@ -31,12 +30,11 @@ const api = {
         currentRoomID,
       },
     }),
-  getOriginMsg: (targetUser, currentRoomID) =>
+  getOriginMsg: (currentRoomID) =>
     axios({
       method: "post",
       url: "find-chat",
       data: {
-        targetUser,
         currentRoomID,
       },
     }),

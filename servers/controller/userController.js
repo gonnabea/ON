@@ -1,8 +1,6 @@
 import db from "../models"
 import passport from "passport"
-import routes from "../routes"
-import { Model } from "sequelize"
-import util from "util"
+
 export const postLogin = passport.authenticate("local", {
   successRedirect: "/success-login",
   failureRedirect: "/loginfailed",

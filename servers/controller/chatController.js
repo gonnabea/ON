@@ -1,8 +1,6 @@
 import db from "../models"
 import { Op } from "sequelize"
 import { uuid } from "uuidv4"
-import util from "util"
-import { NULL } from "mysql2/lib/constants/types"
 
 export const chatController = async (req, res) => {
   // db.Chat.findAll().then(chats => res.json({chats}))
@@ -79,7 +77,7 @@ export const chatroom = async (req, res) => {
 
 export const findMsg = async (req, res) => {
   const {
-    body: { targetUser, currentRoomID },
+    body: { currentRoomID },
   } = req
   console.log("테스트")
   console.log(currentRoomID)
@@ -89,16 +87,6 @@ export const findMsg = async (req, res) => {
         model: db.User,
       },
     ],
-    // where: {
-    //   [Op.or]: [
-    //     {
-    //       chatRoomId: req.user.id + targetUser.id,
-    //     },
-    //     {
-    //       chatRoomId: targetUser.id + req.user.id,
-    //     },
-    //   ],
-    // },
     where: {
       chatRoomId: currentRoomID,
     },
