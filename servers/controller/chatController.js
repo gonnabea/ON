@@ -112,10 +112,18 @@ export const createGroupChat = async (req, res) => {
   const {
     body: { targetUsers },
   } = req // 생성자를 제외한 채팅방의 구성인원들의 id값
-  console.log(targetUsers)
+  let userList = []
+  if (Array.isArray(targetUsers)) {
+    userList = targetUsers
+    // 다대다 채팅
+  } else {
+    userList = [targetUsers]
+  } // 1:1 채팅
+  userList.push(`${req.user.id}/${req.user.username}`)
+  console.log(userList)
   try {
-    let usernameArr = [req.user.username]
-    targetUsers.map(async (targetUser) => {
+    let usernameArr = []
+    userList.map(async (targetUser) => {
       console.log(targetUser)
       const username = targetUser.split("/")[1]
       usernameArr.push(username)
@@ -126,7 +134,7 @@ export const createGroupChat = async (req, res) => {
       id: uuid(),
       text: usernameList, // 랜덤ID 생성
     }).then(async (chatroom) => {
-      targetUsers.map(async (targetUser) => {
+      userList.map(async (targetUser) => {
         const userId = targetUser.split("/")[0]
         const user = await db.User.findOne({
           where: { id: userId },

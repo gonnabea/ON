@@ -230,7 +230,7 @@ const Chatroom = () => {
         }
         inside1={
           <Inside>
-            <GroupChatModal display={modalDisplay} friends={userList} />
+            <GroupChatModal display={modalDisplay} friends={userList} loggedUser={loggedUser} />
             <ChatBox>
               <GreetingNotice>{flash}</GreetingNotice> {/* 새로운 유저가 접속했을 때 */}
               <ChatScreen id="chatScreen" ref={screenRef}>
