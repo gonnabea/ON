@@ -17,6 +17,7 @@ import "./passport"
 import flash from "connect-flash"
 import localsMiddlewares from "./middleware"
 import { getLoggedUser } from "./controller/userController"
+import path from "path"
 
 const PORT = process.env.PORT || 3001 // dotenv 쓰면 프록시가 망가짐
 const app = express()
@@ -125,6 +126,11 @@ app.use(
     saveUninitialized: false,
   })
 )
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "build")))
+}
+
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(morgan("dev"))
@@ -133,6 +139,10 @@ app.use("/currentUser", getLoggedUser) // 현재 로그인 된 유저정보 클�
 app.use(localsMiddlewares)
 app.use(mainRouter)
 app.use(userRouter)
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"))
+})
 
 db.sequelize.sync().then(() => {
   const server = app.listen(PORT, () => {

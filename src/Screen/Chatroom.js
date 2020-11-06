@@ -33,7 +33,7 @@ const Chatroom = () => {
   const [messages, setMessages] = useState([]) // DB에서 가져오는 메세지들
   const [loggedUser, setLoggedUser] = useState() // 로그인 된 유저 정보
   const [userList, setUserList] = useState() // 모든 유저리스트
-  const targetUser = useRef() // 지정된 유저 정보
+  const currentRoom = useRef() // 지정된 유저 정보
   const [submit, setSubmit] = useState(0) // submit시 리렌더링 위해 작동시키는 useState
   const screenRef = useRef()
   const [flash, setFlash] = useState() // 타 유저가 접속했을 시 알림
@@ -42,26 +42,22 @@ const Chatroom = () => {
   const [chatrooms, setChatroomList] = useState([]) // 현재 접속유저의 채팅룸 id 리스트
   const newMsgs = useRef([])
   const location = useLocation()
-  const createUserRoom = async ({ user, previousUser }) => {
-    console.log(user)
-    if (previousUser) {
-      const preRoomID = loggedUser.id + previousUser.id
-      const preRoomID2 = previousUser.id + loggedUser.id
-      socket.emit("leaveRoom", { roomID: preRoomID, roomID2: preRoomID2 })
+  const createUserRoom = async ({ chatroom, previousRoom }) => {
+    console.log(chatroom)
+    if (previousRoom) {
+      socket.emit("leaveRoom", { roomID: chatroom.id })
     } // 채팅방 이동 시 이전 채팅방 소켓 채널 제거
     console.log(location.hash.substring(11))
-    let currentRoomID = user.id
-    if (user.username) currentRoomID = location.hash.substring(11)
+    let currentRoomID = chatroom ? chatroom.id : null
+    if (currentRoomID && currentRoomID.username) currentRoomID = location.hash.substring(11)
     newMsgs.current = [] // 방을 이동할 시 주고받았던 메세지 초기화
-    targetUser.current = user
-    api.findChatroom(user.id, currentRoomID)
-    const roomID = loggedUser.id + targetUser.current.id
-    const roomID2 = targetUser.current.id + loggedUser.id
+    currentRoom.current = chatroom
+    api.findChatroom(chatroom.id, currentRoomID)
+    const roomID = currentRoomID
 
     socket.emit("welcome", {
       msg: `${loggedUser ? loggedUser.username : "새로운 유저"} 접속`,
       roomID,
-      roomID2,
     }) // 서버에 접속, 소켓 ID 전달
     socket.on("welcome", (msg) => {
       setFlash(msg)
@@ -73,13 +69,8 @@ const Chatroom = () => {
       addNewMsg(msg)
     }) // 타 클라이언트에게 메세지 받기 , recieving message
 
-    getOriginMsg(user, currentRoomID)
+    getOriginMsg(currentRoomID)
   } // 유저가 특정 채팅방에 들어왔을 때
-
-  const enterRoom = ({ chatroom }) => {
-    console.log(chatroom)
-    const currentRoomID = chatroom.id
-  }
 
   const getOriginMsg = async (user, currentRoomID) => {
     const originMessage = await api.getOriginMsg(user, currentRoomID) // 백엔드로 타겟 유저와의 채팅기록을 요청
@@ -120,11 +111,11 @@ const Chatroom = () => {
     const { username } = loggedUser
     const newMessage = { username, text: message.value }
     const currentRoomID = location.hash.substring(11)
-    api.sendMsg(message.value, targetUser.current.id, currentRoomID) // 메세지를 백엔드 DB에 저장 요청
+    api.sendMsg(message.value, currentRoomID) // 메세지를 백엔드 DB에 저장 요청
 
-    const roomID = loggedUser.id + targetUser.current.id
-    const roomID2 = targetUser.current.id + loggedUser.id
-    socket.emit("sendMsg", { roomID, roomID2, newMessage }) // 채팅메세지 전송 소켓
+    const roomID = location.hash.substring(11)
+    console.log(roomID)
+    socket.emit("sendMsg", { roomID, newMessage }) // 채팅메세지 전송 소켓
     addNewMsg(newMessage)
     message.value = ""
     setTimeout(
@@ -179,42 +170,14 @@ const Chatroom = () => {
             <Navigation />
             <FrontBgImg src="/cover.jpg" />
             <span onClick={startGroupChat}>
-              <NeonLineButton width={"150px"} color={"#DBC8AB"} text={"+💬"} />
+              <NeonLineButton width={"150px"} color={"#D54191"} text={"+ Add Room"} />
             </span>
-            {/* 그룹 채팅방 생성 모달창 토클 */}
-            {/* <UserList>
-              {userList
-                ? userList.map((user, index) => {
-                    // 존재하는 모든 유저 리스트
-                    return (
-                      <ChatRoomLink
-                        key={index}
-                        onClick={() =>
-                          createUserRoom({ user, previousUser: targetUser.current || null })
-                        }
-                        to={{
-                          pathname: `/chatroom/${user.id}`,
-                          targetUser: user,
-                        }}
-                      >
-                        <UserInfo>
-                          <Username>
-                            {user.username}({user.status === "active" ? "온라인" : "오프라인"}){" "}
-                          </Username>
-                          <StatusMsg>{user.statusMsg}</StatusMsg>
-                        </UserInfo>
-                      </ChatRoomLink>
-                    )
-                  })
-                : null}
-              {/* 모든 유저 목록 불러오기 */}
-            {/* </UserList> */}
             <ChatroomList>
               {chatrooms.map((chatroom, index) => {
                 return (
                   <ChatRoomLink
                     key={index}
-                    onClick={() => createUserRoom({ user: chatroom })}
+                    onClick={() => createUserRoom({ chatroom, previousRoom: currentRoom })}
                     to={{
                       pathname: `/chatroom/${chatroom.id}`,
                     }}
@@ -230,7 +193,7 @@ const Chatroom = () => {
         }
         inside1={
           <Inside>
-            <GroupChatModal display={modalDisplay} friends={userList} />
+            <GroupChatModal display={modalDisplay} friends={userList} loggedUser={loggedUser} />
             <ChatBox>
               <GreetingNotice>{flash}</GreetingNotice> {/* 새로운 유저가 접속했을 때 */}
               <ChatScreen id="chatScreen" ref={screenRef}>

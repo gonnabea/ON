@@ -1,8 +1,6 @@
 import db from "../models"
 import { Op } from "sequelize"
 import { uuid } from "uuidv4"
-import util from "util"
-import { NULL } from "mysql2/lib/constants/types"
 
 export const chatController = async (req, res) => {
   // db.Chat.findAll().then(chats => res.json({chats}))
@@ -79,7 +77,7 @@ export const chatroom = async (req, res) => {
 
 export const findMsg = async (req, res) => {
   const {
-    body: { targetUser, currentRoomID },
+    body: { currentRoomID },
   } = req
   console.log("테스트")
   console.log(currentRoomID)
@@ -89,16 +87,6 @@ export const findMsg = async (req, res) => {
         model: db.User,
       },
     ],
-    // where: {
-    //   [Op.or]: [
-    //     {
-    //       chatRoomId: req.user.id + targetUser.id,
-    //     },
-    //     {
-    //       chatRoomId: targetUser.id + req.user.id,
-    //     },
-    //   ],
-    // },
     where: {
       chatRoomId: currentRoomID,
     },
@@ -112,10 +100,18 @@ export const createGroupChat = async (req, res) => {
   const {
     body: { targetUsers },
   } = req // 생성자를 제외한 채팅방의 구성인원들의 id값
-  console.log(targetUsers)
+  let userList = []
+  if (Array.isArray(targetUsers)) {
+    userList = targetUsers
+    // 다대다 채팅
+  } else {
+    userList = [targetUsers]
+  } // 1:1 채팅
+  userList.push(`${req.user.id}/${req.user.username}`)
+  console.log(userList)
   try {
-    let usernameArr = [req.user.username]
-    targetUsers.map(async (targetUser) => {
+    let usernameArr = []
+    userList.map(async (targetUser) => {
       console.log(targetUser)
       const username = targetUser.split("/")[1]
       usernameArr.push(username)
@@ -126,7 +122,7 @@ export const createGroupChat = async (req, res) => {
       id: uuid(),
       text: usernameList, // 랜덤ID 생성
     }).then(async (chatroom) => {
-      targetUsers.map(async (targetUser) => {
+      userList.map(async (targetUser) => {
         const userId = targetUser.split("/")[0]
         const user = await db.User.findOne({
           where: { id: userId },

@@ -26,23 +26,25 @@ const Checkbox = styled.input``
 
 const SubmitBtn = styled.input``
 
-const GroupChatModal = ({ friends, display = "none" }) => (
+const GroupChatModal = ({ friends, display = "none", loggedUser }) => (
   <Container display={display}>
     <Title>대화상대 선택</Title>
     <SubmitForm action="create-groupchat" method="post">
       <FriendsList>
-        {friends
-          ? friends.map((friend) => (
-              <Friend>
-                <ProfileImg>{friend.profileImg ? friend.profileImg : null}</ProfileImg>
-                <Checkbox
-                  type="checkbox"
-                  name={"targetUsers"}
-                  value={`${friend.id}/${friend.username}`}
-                />
-                <FriendName>{friend.username}</FriendName>
-              </Friend>
-            ))
+        {friends && loggedUser
+          ? friends.map((friend) =>
+              loggedUser.username !== friend.username ? ( // 본인은 목록에서 제거
+                <Friend>
+                  <ProfileImg>{friend.profileImg ? friend.profileImg : null}</ProfileImg>
+                  <Checkbox
+                    type="checkbox"
+                    name={"targetUsers"}
+                    value={`${friend.id}/${friend.username}`}
+                  />
+                  <FriendName>{friend.username}</FriendName>
+                </Friend>
+              ) : null
+            )
           : null}
       </FriendsList>
       <SubmitBtn type="submit" value="드루와!" />

@@ -1,4 +1,4 @@
-import express, { Router } from "express"
+import express from "express"
 import routes from "../routes"
 import {
   postLogin,
