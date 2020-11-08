@@ -44,8 +44,9 @@ const Chatroom = () => {
   const location = useLocation()
   const createUserRoom = async ({ chatroom, previousRoom }) => {
     console.log(chatroom)
-    if (previousRoom) {
-      socket.emit("leaveRoom", { roomID: chatroom.id })
+    if (previousRoom.current) {
+      console.log(previousRoom)
+      socket.emit("leaveRoom", { roomID: previousRoom.current.id })
     } // 채팅방 이동 시 이전 채팅방 소켓 채널 제거
     console.log(location.hash.substring(11))
     let currentRoomID = chatroom ? chatroom.id : null
@@ -170,7 +171,7 @@ const Chatroom = () => {
             <Navigation />
             <FrontBgImg src="/cover.jpg" />
             <span onClick={startGroupChat}>
-              <NeonLineButton width={"150px"} color={"#D54191"} text={"+ Add Room"} />
+              <NeonLineButton width={"150px"} color={"#6B00FE"} text={"+ Add Room"} />
             </span>
             <ChatroomList>
               {chatrooms.map((chatroom, index) => {
