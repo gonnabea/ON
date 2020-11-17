@@ -12,7 +12,7 @@
 - [x] Node.js
 - [x] Socket.io
 - [x] Passport.js
-- [ ] WebRTC
+- [x] WebRTC (peerjs)
 
 - 본 프로젝트의 **주 목적은 RDBMS: MySQL, webSocket에 대한 학습**이며,
   Express.js + React.js의 조합에 익숙해지기 위해 구상한 사이드 프로젝트입니다.
