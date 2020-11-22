@@ -144,7 +144,6 @@ const Chatroom = () => {
   useEffect(() => {
     try {
       handleApi()
-      console.log(loggedUser)
     } catch (err) {
       console.log(err)
     }
