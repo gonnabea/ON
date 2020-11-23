@@ -65,7 +65,7 @@
 
 ## 사용 스택에 대한 설명 / 정리
 
-1. 왜 MySQL을 사용했는가?
+### 1. 왜 MySQL을 사용했는가?
 
 저는 처음 접한 DB가 mongoDB였고 이 프로젝트 이전에는 다른 DB를 사용해본 적이 없었습니다
 그런데 이번에 이 프로젝트에서는 DB형태가 SNS형식 (스키마간의 관계가 복잡하게 맺어져 있음) 이므로
@@ -98,7 +98,7 @@ mongoDB와 같은 경우, 데이터를 연결할 때 테이블에 테이블을 �
 
 그리고 프로젝트가 커질 수록 용량을 덜 차지하게 되는 RDBMS가 더 적합하다고 판단했습니다.
 
-2. Node.js 사용 이유
+### 2. Node.js 사용 이유
 
 본 프로젝트는 실시간 채팅, 영상 스트리밍이 주기능인 어플리케이션이므로 Node.js의 장점을 잘 살릴 수 있습니다.
 Node.js는 event-driven, non-blocking I/O model을 사용하여 실시간 서비스에 유리합니다
@@ -136,7 +136,7 @@ Both elements feature the same API. Like Node.js, it is event-driven. The Socket
 Express.JS
 It performs like a Node.js framework that utilizes many effective features that help organize the routing of the app. It can simply deal with any templating solution. Node.js’s basic functionality is increased by it. Moreover, it allows a better code organization.
 
-3. WebRTC란?
+### 3. WebRTC란?
 
 - 실시간 스트리밍 기능을 구현하고 싶어 WebRTC 오픈소스를 찾게 되었습니다.
 
@@ -168,9 +168,9 @@ WebRTC에 대한 기타 내용 정리
 - [x] 일부 브라우저에서 지원이 되지 않습니다 (ex) Firefox
       -> 그러나 adapter.js 라는 것을 이용하면 호환성을 개선할 수 있는 것으로 보입니다.
 
-## 결론
+#### 결론
 
-- webSocket과 WebRTC의 특성을 비교하여 용도에 맞게 사용해주면 됩니다.
+webSocket과 WebRTC의 특성을 비교하여 용도에 맞게 사용해주면 됩니다.
 
 webSocket은 안정성
 WebRTC는 속도
@@ -178,6 +178,16 @@ WebRTC는 속도
 
 WebSocket으로도 영상 스트리밍을 구현할 수 있으나 WebRTC를 선호하는 것은 이 때문입니다.
 
-#### 참고자료
+- 참고자료
 
-- https://velog.io/@ehdrms2034/WebRTC-%EC%9B%B9%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80%EB%A1%9C-%ED%99%94%EC%83%81-%EC%B1%84%ED%8C%85%EC%9D%84-%EB%A7%8C%EB%93%A4-%EC%88%98-%EC%9E%88%EB%8B%A4%EA%B3%A0
+https://velog.io/@ehdrms2034/WebRTC-%EC%9B%B9%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80%EB%A1%9C-%ED%99%94%EC%83%81-%EC%B1%84%ED%8C%85%EC%9D%84-%EB%A7%8C%EB%93%A4-%EC%88%98-%EC%9E%88%EB%8B%A4%EA%B3%A0
+
+### 4. React를 사용한 이유
+
+실시간 채팅은 당연히 화면 렌더링을 자주할 수 밖에 없습니다.
+
+채팅을 하나 보낼 때마다 화면에 변화된 것을 나타내주어야 하기 때문이죠.
+
+리액트는 컴포넌트의 활용, api json data 처리, SPA 와 같은 유용한 특성을 가지고 있으나,
+이 프로젝트에서 가장 유리한 점은
+리액트는 리렌더링을 자주 해주기 용이한 구조를 가지고 있다는 것이라고 생각합니다.
