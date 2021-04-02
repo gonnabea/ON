@@ -8,13 +8,15 @@
 
 - [x] MySQL Sequlize 💎
 - [x] Express.js
-- [x] React.js (Styled-Components, Hooks)
-- [ ] Context-API
+- [x] React.js (Styled-Components, Hooks, Context-API)
 - [x] Node.js
-- [x] Socket.io
+- [x] Socket.io (Node.js, Flask-Socket.io)
 - [x] Passport.js
 - [x] WebRTC (Peerjs)
-- [x] OpenCV-Python (Flask)
+- [x] Flask
+- [x] OpenCV
+- [x] Heroku (for Node.js API)
+- [ ] AWS (for Flask API)
 
 - 본 프로젝트의 **주 목적은 RDBMS: MySQL, webSocket에 대한 학습**이며,
   Express.js + React.js의 조합에 익숙해지기 위해 구상한 사이드 프로젝트입니다.
