@@ -6,15 +6,15 @@
 
 ## 사용 기술 스택
 
-- [x] MySQL Sequlize 💎
+- [x] MySQL Sequlize
 - [x] Express.js
 - [x] React.js (Styled-Components, Hooks, Context-API)
 - [x] Node.js
 - [x] Socket.io (Node.js, Flask-Socket.io)
 - [x] Passport.js
-- [x] WebRTC (Peerjs)
+- [x] WebRTC (Peerjs) 💎
 - [x] Flask
-- [x] OpenCV
+- [x] OpenCV 💎
 - [x] Heroku (for Node.js API)
 - [ ] AWS (for Flask API)
 
@@ -31,11 +31,13 @@
 - [x] 단톡방 구현
 - [x] 배포
 - [x] 화상채팅 (WebRTC) 💎
+- [x] 얼굴 인식
+- [x] 얼굴 인식 시 효과넣기 (토끼 귀 등)
 - [ ] 유저 프로필 사진 (📌진행중)
-- [x] 얼굴인식
 - [ ] 메세지 읽음 숫자
 - [ ] 공지
-- [ ] 파일 전송 (이미지, 영상)
+- [ ] 메세지 수신 알림
+- [ ] 채팅방 나가기
 
 ## 추가 기능
 
